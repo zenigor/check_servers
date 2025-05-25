@@ -31,7 +31,7 @@ jobs:
       # 4. Запускаем ваш Python-скрипт
       # Замените 'your_script_name.py' на реальное имя вашего файла
       - name: Run server check script
-        run: python your_script_name.py
+        run: python check_servers.py
 
       # 5. Коммитим и пушим изменения (если они есть)
       - name: Commit and push if changes
