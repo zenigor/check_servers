@@ -1,0 +1,50 @@
+name: Update Good Servers List # Название вашего workflow, отображается в GitHub Actions
+
+on:
+  schedule:
+    # Запускать каждые 2 часа (0 минут, каждый 2-й час, каждый день, каждый месяц, каждый день недели)
+    # Подробнее про cron: https://crontab.guru/
+    - cron: '0 */2 * * *'
+  workflow_dispatch: # Эта строчка позволяет запускать workflow вручную из интерфейса GitHub Actions
+
+jobs:
+  build_and_update_list:
+    runs-on: windows-latest # Используем Windows, т.к. у вас xray.exe
+
+    steps:
+      # 1. Клонируем ваш репозиторий, чтобы получить доступ к скрипту и xray.exe
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Используем официальный action для клонирования
+
+      # 2. Устанавливаем Python нужной версии
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9' # Укажите версию Python, которую используете (например, 3.8, 3.9, 3.10, 3.11)
+
+      # 3. Устанавливаем зависимости Python для вашего скрипта
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyyaml
+
+      # 4. Запускаем ваш Python-скрипт
+      # Замените 'your_script_name.py' на реальное имя вашего файла
+      - name: Run server check script
+        run: python your_script_name.py
+
+      # 5. Коммитим и пушим изменения (если они есть)
+      - name: Commit and push if changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add good_servers.yml
+          # Проверяем, есть ли изменения для коммита
+          # (git diff --staged --quiet) вернет 0, если нет изменений, и 1, если есть
+          if ! git diff --staged --quiet; then
+            git commit -m "Automated update: good_servers.yml"
+            git push
+          else
+            echo "No changes to commit for good_servers.yml."
+          fi
+        # Эта часть гарантирует, что коммит будет сделан только если good_servers.yml действительно изменился.
