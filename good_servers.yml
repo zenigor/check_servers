@@ -1,7 +1,0 @@
-proxies:
-- name: 🇺🇸US-149.28.106.134-0419 | 95.305MB
-  server: 149.28.106.134
-  port: 31444
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 46e67f5a-63e4-4566-870c-76eaa9cf76fe
