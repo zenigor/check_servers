@@ -11,6 +11,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇺🇸US-156.146.38.168-0308 | 122.227MB
+  server: 156.146.38.168
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇺🇸US-37.19.198.236-0297 | 121.969MB
   server: 37.19.198.236
   port: 443
@@ -125,6 +131,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇬🇧GB-212.102.53.79-5476 | 32.041MB
+  server: 212.102.53.79
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-212.102.53.193-0329 | 31.935MB
   server: 212.102.53.193
   port: 443
@@ -143,12 +155,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 44fe4b7d-cd48-45fc-a036-60ea40e4a96c
-- name: 🇬🇧GB-131.145.124.103-0341 | 31.027MB
-  server: series-a2.varzesh360.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: mps3FwmDjLrWaOVg
 - name: 🇬🇧GB-212.102.53.198-0347 | 30.78MB
   server: 212.102.53.198
   port: 443
@@ -161,18 +167,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Bog0ELmMM9DSxDdQ
-- name: 🇬🇧GB-131.145.124.103-0351 | 30.284MB
-  server: admin.c1.webramz.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
-- name: 🇬🇧GB-131.145.124.103-0330 | 30.269MB
-  server: freakconfig13.felafel.org
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
 - name: 🇬🇧GB-85.210.120.237-0344 | 30.002MB
   server: 85.210.120.237
   port: 443
@@ -191,24 +185,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 69MUii7VDwMqh7Hz
-- name: 🇬🇧GB-131.145.124.103-0326 | 29.595MB
-  server: series-a1.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
 - name: 🇬🇧GB-131.145.124.17-0327 | 29.359MB
   server: api.namasha.co
   port: 443
   type: ss
   cipher: chacha20-ietf-poly1305
   password: u17T3BvpYaaiuW2c
-- name: 🇬🇧GB-131.145.124.103-0339 | 29.1MB
-  server: series-a2.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
 - name: 🇬🇧GB-131.145.124.17-0332 | 28.807MB
   server: admin.c2.webramz.co
   port: 443
@@ -323,12 +305,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0zyDRZ1XmNXaaCAN7KEA8a
-- name: 🇵🇱PL-45.144.48.63-0391 | 17.441MB
-  server: 45.144.48.63
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: d3837224ed465f00
 - name: 🇯🇵JP-139.162.106.142-0388 | 17.088MB
   server: 139.162.106.142
   port: 11359
@@ -341,12 +317,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇵🇱PL-45.144.48.63-0396 | 16.616MB
-  server: war.ssvpnapp.win
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: d3837224ed465f00
 - name: 🇳🇱NL-77.110.102.235-0442 | 10.117MB
   server: 77.110.102.235
   port: 31080
