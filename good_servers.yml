@@ -1,0 +1,43 @@
+proxies:
+- name: 🇺🇸US-37.19.198.243-0420 | 238.166MB
+  server: 37.19.198.243
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-37.19.198.244-0418 | 231.961MB
+  server: 37.19.198.244
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-37.19.198.236-0424 | 222.38MB
+  server: 37.19.198.236
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-37.19.198.160-0428 | 138.455MB
+  server: 37.19.198.160
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-149.28.106.134-0419 | 95.305MB
+  server: 149.28.106.134
+  port: 31444
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 46e67f5a-63e4-4566-870c-76eaa9cf76fe
+- name: 🇺🇸US-156.146.38.167-0430 | 72.388MB
+  server: 156.146.38.167
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-156.146.38.168-0429 | 66.35MB
+  server: 156.146.38.168
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
