@@ -7,6 +7,9 @@ on:
     - cron: '0 */2 * * *'
   workflow_dispatch: # Эта строчка позволяет запускать workflow вручную из интерфейса GitHub Actions
 
+permissions: # <--- ДОБАВЛЕНО: Разрешения для workflow
+  contents: write  # <--- Необходимо для git push
+
 jobs:
   build_and_update_list:
     runs-on: windows-latest # Используем Windows, т.к. у вас xray.exe
@@ -41,12 +44,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add good_servers.yml
-          # Проверяем, есть ли изменения для коммита
-          # (git diff --staged --quiet) вернет 0, если нет изменений, и 1, если есть
-          if (!(git diff --staged --quiet)) {
+          
+          # Выполняем git diff и проверяем статус его выполнения ($?)
+          # git diff --staged --quiet вернет 0 (успех, $? будет $true), если нет изменений для коммита.
+          # И вернет 1 (неудача, $? будет $false), если есть изменения.
+          git diff --staged --quiet 
+          if (-not $?) { # Если последняя команда НЕ завершилась успешно (т.е. БЫЛИ изменения)
             git commit -m "Automated update: good_servers.yml"
             git push
           } else {
             echo "No changes to commit for good_servers.yml."
           }
-        # Эта часть гарантирует, что коммит будет сделан только если good_servers.yml действительно изменился.
