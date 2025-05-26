@@ -18,7 +18,7 @@ GOOD_SERVERS_FILENAME = "good_servers.yml"
 PRE_CHECK_TIMEOUT = 7 # Таймаут для предварительной проверки (в секундах)
 REQUEST_TIMEOUT = 15    # Таймаут для основной проверки
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-MAX_SERVERS_TO_TEST = 10
+MAX_SERVERS_TO_TEST = 0
 # --- КОНЕЦ КОНФИГУРАЦИИ ---
 
 def check_core_executable():
