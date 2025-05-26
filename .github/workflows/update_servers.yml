@@ -43,10 +43,10 @@ jobs:
           git add good_servers.yml
           # Проверяем, есть ли изменения для коммита
           # (git diff --staged --quiet) вернет 0, если нет изменений, и 1, если есть
-          if ! git diff --staged --quiet; then
+          if (!(git diff --staged --quiet)) {
             git commit -m "Automated update: good_servers.yml"
             git push
-          else
+          } else {
             echo "No changes to commit for good_servers.yml."
-          fi
+          }
         # Эта часть гарантирует, что коммит будет сделан только если good_servers.yml действительно изменился.
