@@ -43,15 +43,15 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add good_servers.yml
+          git add *_good_servers.yml
           
           # Выполняем git diff и проверяем статус его выполнения ($?)
           # git diff --staged --quiet вернет 0 (успех, $? будет $true), если нет изменений для коммита.
           # И вернет 1 (неудача, $? будет $false), если есть изменения.
           git diff --staged --quiet 
           if (-not $?) { # Если последняя команда НЕ завершилась успешно (т.е. БЫЛИ изменения)
-            git commit -m "Automated update: good_servers.yml"
+            git commit -m "Automated update: good server lists"
             git push
           } else {
-            echo "No changes to commit for good_servers.yml."
+            echo "No changes to commit for good server lists."
           }
