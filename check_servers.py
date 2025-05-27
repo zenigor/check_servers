@@ -263,37 +263,77 @@ def fetch_server_configs(url):
 
         elif file_extension == ".txt" or "text/plain" in content_type or "application/octet-stream" in content_type:
             print(f"  Тип подписки: TXT ({url})")
-            lines = response.text.splitlines()
-            parsed_servers = []
-            for line in lines:
-                line = line.strip()
-                if not line or line.startswith("#"): # Пропускаем пустые строки и комментарии
+            lines_from_file_content = response.text.splitlines()
+            parsed_servers = [] # Используем parsed_servers, как в вашей текущей версии
+            
+            for line_from_file in lines_from_file_content:
+                line_from_file = line_from_file.strip()
+                if not line_from_file or line_from_file.startswith("#"): # Пропускаем пустые строки и комментарии
                     continue
 
-                if line.startswith("vmess://"):
-                    parsed = parse_vmess_vless_link(line, "vmess")
-                    if parsed: parsed_servers.append(parsed)
-                elif line.startswith("vless://"):
-                    parsed = parse_vmess_vless_link(line, "vless")
-                    if parsed: parsed_servers.append(parsed)
-                elif line.startswith("ss://"):
-                    parsed = parse_ss_link(line)
-                    if parsed: parsed_servers.append(parsed)
-                elif line.startswith("trojan://"):
-                    parsed = parse_trojan_link(line)
-                    if parsed: parsed_servers.append(parsed)
-                elif line.startswith("http://") or line.startswith("https://"):
-                    # Предполагаем, что это ссылка на другую подписку, обрабатываем рекурсивно
-                    # Это может привести к бесконечной рекурсии, если подписки ссылаются друг на друга.
-                    # Нужен механизм отслеживания уже обработанных URL или ограничение глубины.
-                    # Пока что пропустим рекурсивную обработку для простоты.
-                    print(f"  Найден вложенный URL в TXT: {line}. Рекурсивная обработка пока не реализована, URL пропущен.")
-                    # sub_servers, _ = fetch_server_configs(line) # Закомментировано во избежание рекурсии
-                    # if sub_servers:
-                    #     parsed_servers.extend(sub_servers)
-                else:
-                    print(f"  Неизвестный формат строки в TXT: {line[:50]}...")
-            all_servers = parsed_servers
+                strings_to_attempt_parsing = []
+                decoded_content_block_for_log_check = "" # Для проверки в логгировании неизвестных строк
+
+                try:
+                    # Попытка декодировать всю строку из файла как base64
+                    padding = '=' * (-len(line_from_file) % 4)
+                    decoded_bytes = base64.urlsafe_b64decode(line_from_file + padding)
+                    decoded_content_block = decoded_bytes.decode('utf-8').strip()
+                    decoded_content_block_for_log_check = decoded_content_block # Сохраняем для проверки ниже
+                    
+                    # Проверяем, начинается ли декодированный блок с известного протокола
+                    if decoded_content_block.startswith(("vless://", "vmess://", "ss://", "trojan://")):
+                        print(f"  Обнаружена и декодирована строка Base64. Содержимое будет разделено по строкам для парсинга: {line_from_file[:30]}...")
+                        for single_link_in_decoded_block in decoded_content_block.splitlines():
+                            single_link_in_decoded_block = single_link_in_decoded_block.strip()
+                            if single_link_in_decoded_block:
+                                strings_to_attempt_parsing.append(single_link_in_decoded_block)
+                    else:
+                        # Декодировано, но не похоже на конфигурацию. Обрабатываем исходную строку как литерал.
+                        print(f"  Строка была декодирована из Base64, но не начинается с известного протокола. Обработка как обычной строки: {line_from_file[:50]}...")
+                        strings_to_attempt_parsing.append(line_from_file)
+                
+                except Exception:
+                    # Ошибка декодирования Base64, обрабатываем исходную строку как литерал.
+                    strings_to_attempt_parsing.append(line_from_file)
+
+                for current_line_to_parse in strings_to_attempt_parsing:
+                    server_config = None
+                    if current_line_to_parse.startswith("ss://"):
+                        server_config = parse_ss_link(current_line_to_parse)
+                    elif current_line_to_parse.startswith("trojan://"):
+                        server_config = parse_trojan_link(current_line_to_parse)
+                    elif current_line_to_parse.startswith("vless://"):
+                        server_config = parse_vmess_vless_link(current_line_to_parse, link_type="vless")
+                    elif current_line_to_parse.startswith("vmess://"):
+                        server_config = parse_vmess_vless_link(current_line_to_parse, link_type="vmess")
+                    elif current_line_to_parse.startswith("http://") or current_line_to_parse.startswith("https://"):
+                        # Эта проверка должна быть здесь, если current_line_to_parse не является результатом Base64
+                        # или если сама ссылка на подписку была внутри Base64.
+                        # Убедимся, что это не результат Base64-декодирования, который случайно выглядит как HTTP URL.
+                        # Обычно, если это была Base64 и она декодировалась, она не должна снова попасть сюда как http,
+                        # а должна была быть обработана выше.
+                        if line_from_file == current_line_to_parse: # Только если это оригинальная строка
+                             print(f"  Найден вложенный URL в TXT: {current_line_to_parse}. Рекурсивная обработка пока не реализована, URL пропущен.")
+                        # Рекурсивная обработка закомментирована, как в вашем коде
+                        # sub_servers, _ = fetch_server_configs(current_line_to_parse)
+                        # if sub_servers:
+                        #     parsed_servers.extend(sub_servers)
+                    else:
+                        # Логгируем только если это была оригинальная строка из файла, которая не была Base64
+                        # ИЛИ если это была часть Base64, но все равно не распозналась.
+                        # Условие `not decoded_content_block_for_log_check.startswith(...)` проверяет, был ли успешный decode, но не тот протокол
+                        is_original_unparsed_line = (line_from_file == current_line_to_parse)
+                        is_decoded_but_unknown_sub_line = (decoded_content_block_for_log_check and line_from_file != current_line_to_parse and not current_line_to_parse.startswith(("vless://", "vmess://", "ss://", "trojan://")))
+                        
+                        if is_original_unparsed_line or is_decoded_but_unknown_sub_line:
+                             print(f"  Неизвестный формат строки в TXT: {current_line_to_parse[:50]}...")
+
+
+                    if server_config:
+                        parsed_servers.append(server_config)
+            
+            all_servers = parsed_servers # Присваиваем результат в all_servers
         else:
             print(f"  Неподдерживаемый тип контента или расширение файла для {url}: ext='{file_extension}', content-type='{content_type}'. Попытка обработать как YAML.")
             # По умолчанию пытаемся как YAML, так как это был исходный формат
