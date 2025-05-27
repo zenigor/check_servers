@@ -337,7 +337,7 @@ def fetch_server_configs(url):
             # Фильтрация серверов по регулярному выражению для TXT подписок
             if parsed_servers: # Только если есть что фильтровать
                 print(f"  Начинаю фильтрацию {len(parsed_servers)} серверов по регулярному выражению...")
-                regex_pattern = r"^(?!.*(?:NA-|RU-)).*(?:(?:TCP-RLT|GRPC-RLT)).*"
+                regex_pattern = r"^(?!.*(?:NA-|RU-)).*(?:\b(?:TCP-RLT|GRPC-RLT)\b).*"
                 filtered_servers_by_name = []
                 for server in parsed_servers:
                     server_name = server.get("name", "")
