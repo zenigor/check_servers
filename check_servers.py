@@ -23,6 +23,7 @@ PRE_CHECK_TIMEOUT = 7 # Таймаут для предварительной п�
 REQUEST_TIMEOUT = 15    # Таймаут для основной проверки
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 MAX_SERVERS_TO_TEST = 0
+DEBUG_SAVE_CONFIG = True # Флаг для сохранения конфигов, вызвавших ошибку 23
 # --- КОНЕЦ КОНФИГУРАЦИИ ---
 
 def check_core_executable():
@@ -343,8 +344,8 @@ def fetch_server_configs(url):
                     server_name = server.get("name", "")
                     if re.search(regex_pattern, server_name):
                         filtered_servers_by_name.append(server)
-                    else:
-                        print(f"  Сервер '{server_name}' не соответствует регулярному выражению, отфильтрован.")
+                    # else: # Убираем вывод отфильтрованных серверов
+                    #     print(f"  Сервер '{server_name}' не соответствует регулярному выражению, отфильтрован.")
                 
                 if not filtered_servers_by_name:
                     print(f"  Внимание: После фильтрации по имени не осталось серверов из {url}.")
@@ -687,6 +688,19 @@ def main():
                         print(f"  XRAY STDOUT ({server_name}):\\n{stdout_data.strip()}")
                     if stderr_data:
                         print(f"  XRAY STDERR ({server_name}):\\n{stderr_data.strip()}")
+                    
+                    if process.returncode == 23 and DEBUG_SAVE_CONFIG:
+                        saved_config_filename = f"debug_config_{server_name.replace(' ', '_').replace(':', '_')}.json"
+                        if os.path.exists(config_file):
+                            try:
+                                shutil.copyfile(config_file, saved_config_filename)
+                                print(f"  КОНФИГ С ОШИБКОЙ 23 сохранен как: {saved_config_filename}")
+                                print(f"  Детали сервера, вызвавшего ошибку: {json.dumps(server_details, indent=2, ensure_ascii=False)}")
+                            except Exception as e_copy:
+                                print(f"  Не удалось скопировать ошибочный конфиг {config_file} в {saved_config_filename}: {e_copy}")
+                        else:
+                            print(f"  Файл конфига {config_file} не найден для копирования при ошибке 23.")
+
                     # Нет смысла продолжать с этим сервером, если ядро не запустилось
                     # Удаляем из списка активных, так как он уже "неактивный"
                     active_processes.pop() # Удаляем последний добавленный процесс
