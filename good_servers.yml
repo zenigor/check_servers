@@ -41,12 +41,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-156.146.38.170-0296 | 65.673MB
-  server: 156.146.38.170
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇺🇸US-173.244.56.6-0287 | 55.21MB
   server: 173.244.56.6
   port: 443
@@ -59,12 +53,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇨🇦CA-79.127.233.170-5372 | 43.547MB
-  server: 79.127.233.170
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
 - name: 🇺🇸US-212.102.47.132-0292 | 42.68MB
   server: 212.102.47.132
   port: 443
@@ -203,42 +191,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: WstuSnlu4ieA9M0L
-- name: 🇬🇧GB-131.145.124.103-0386 | 31.891MB
-  server: freakconfig13.felafel.org
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
-- name: 🇬🇧GB-131.145.124.103-0400 | 29.975MB
-  server: series-a2.varzesh360.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: mps3FwmDjLrWaOVg
 - name: 🇬🇧GB-212.102.53.197-0361 | 29.463MB
   server: 212.102.53.197
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇬🇧GB-131.145.124.103-0395 | 29.207MB
-  server: series-a1.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
-- name: 🇬🇧GB-131.145.124.103-0392 | 29.144MB
-  server: admin.c1.webramz.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
-- name: 🇬🇧GB-131.145.124.103-0393 | 28.973MB
-  server: series-a2.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
 - name: 🇨🇦CA-149.22.95.183-0294 | 28.38MB
   server: 149.22.95.183
   port: 443
@@ -371,6 +329,34 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
+- name: RELAY-104.21.64.1-0436 | 3.375MB
+  server: 104.21.64.1
+  port: 2096
+  type: vmess
+  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
+  alterId: 0
+  cipher: auto
+  tls: tls
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: de01.sh-cloudflare.sbs
+- name: RELAY-104.21.96.1-0423 | 3.206MB
+  server: 104.21.96.1
+  port: 2096
+  type: vmess
+  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
+  alterId: 0
+  cipher: auto
+  tls: tls
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: de01.sh-cloudflare.sbs
 - name: 🇪🇸ES-45.154.206.192-0443 | 3.079MB
   server: 45.154.206.192
   port: 990
@@ -423,12 +409,6 @@ proxies:
     path: /
     headers:
       Host: rak1d3.777269.xyz
-- name: 🇷🇺RU-45.139.24.24-0399 | 1.521MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: BE-192.71.249.146-0483 | 1.076MB
   server: 192.71.249.146
   port: 990
