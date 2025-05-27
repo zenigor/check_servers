@@ -440,8 +440,8 @@ def create_v2ray_config(server_details):
             outbound_config["streamSettings"]["realitySettings"] = {
                 "serverName": server_details.get("servername", server_details.get("sni", "")),
                 "fingerprint": server_details.get("fingerprint", reality_opts_yaml.get("fingerprint", "chrome")),
-                "publicKey": reality_opts_yaml.get("public-key", server_details.get("public-key", "")),
-                "shortId": reality_opts_yaml.get("short-id", server_details.get("short-id", "")),
+                "publicKey": reality_opts_yaml.get("public-key", server_details.get("publicKey", "")),
+                "shortId": reality_opts_yaml.get("short-id", server_details.get("shortId", "")),
                 "spiderX": reality_opts_yaml.get("spider-x", server_details.get("spiderX", "")),
             }
             server_details["tls"] = None
