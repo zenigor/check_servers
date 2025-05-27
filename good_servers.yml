@@ -47,6 +47,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇺🇸US-173.244.56.6-0287 | 55.21MB
+  server: 173.244.56.6
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇺🇸US-173.244.56.9-0288 | 47.849MB
   server: 173.244.56.9
   port: 443
@@ -275,12 +281,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: SE-46.246.98.155-0456 | 18.064MB
-  server: 46.246.98.155
-  port: 44013
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: UDcjYQ6Z6AIWxViZpqyOmO
 - name: 🇬🇧GB-141.98.101.178-0404 | 17.22MB
   server: 141.98.101.178
   port: 443
@@ -317,12 +317,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: d3837224ed465f00
-- name: 🇳🇱NL-77.110.102.235-0406 | 9.116MB
-  server: 77.110.102.235
-  port: 31080
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 74J5gS8i6FiGupqrahFvM9
 - name: 🇷🇺RU-45.151.62.54-5440 | 8.485MB
   server: 45.151.62.54
   port: 28825
@@ -377,34 +371,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: RELAY-104.21.64.1-0436 | 3.375MB
-  server: 104.21.64.1
-  port: 2096
-  type: vmess
-  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
-  alterId: 0
-  cipher: auto
-  tls: tls
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: de01.sh-cloudflare.sbs
-- name: RELAY-104.21.96.1-0423 | 3.206MB
-  server: 104.21.96.1
-  port: 2096
-  type: vmess
-  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
-  alterId: 0
-  cipher: auto
-  tls: tls
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: de01.sh-cloudflare.sbs
 - name: 🇪🇸ES-45.154.206.192-0443 | 3.079MB
   server: 45.154.206.192
   port: 990
@@ -457,6 +423,12 @@ proxies:
     path: /
     headers:
       Host: rak1d3.777269.xyz
+- name: 🇷🇺RU-45.139.24.24-0399 | 1.521MB
+  server: 45.139.24.24
+  port: 57456
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 360e21d21977dc11
 - name: BE-192.71.249.146-0483 | 1.076MB
   server: 192.71.249.146
   port: 990
