@@ -17,12 +17,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-37.19.198.244-0306 | 134.357MB
-  server: 37.19.198.244
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇺🇸US-149.28.106.134-0300 | 133.197MB
   server: 149.28.106.134
   port: 31444
@@ -257,12 +251,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Bog0ELmMM9DSxDdQ
-- name: CH-156.146.62.163-0388 | 31.996MB
-  server: 156.146.62.163
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: CH-156.146.62.164-0407 | 31.002MB
   server: 156.146.62.164
   port: 443
@@ -347,12 +335,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇪🇸ES-92.38.171.215-5382 | 16.605MB
-  server: 92.38.171.215
-  port: 31348
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 0RsrcFJ1vOsWEqg3P55hvaacKfuShT0cc1h0t8AD0NA8u1uR
 - name: 🇯🇵JP-139.162.106.142-0318 | 16.495MB
   server: 139.162.106.142
   port: 11359
@@ -377,34 +359,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: RELAY-104.21.64.1-0436 | 10.28MB
-  server: 104.21.64.1
-  port: 2096
-  type: vmess
-  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
-  alterId: 0
-  cipher: auto
-  tls: tls
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: de01.sh-cloudflare.sbs
-- name: RELAY-104.21.96.1-0423 | 10.121MB
-  server: 104.21.96.1
-  port: 2096
-  type: vmess
-  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
-  alterId: 0
-  cipher: auto
-  tls: tls
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: de01.sh-cloudflare.sbs
 - name: 🇪🇸ES-45.154.206.192-0443 | 8.826MB
   server: 45.154.206.192
   port: 990
@@ -457,12 +411,6 @@ proxies:
     path: /
     headers:
       Host: rak1d3.777269.xyz
-- name: 🇷🇺RU-45.139.24.24-0399 | 2.889MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: BE-192.71.249.146-0483 | 1.95MB
   server: 192.71.249.146
   port: 990
