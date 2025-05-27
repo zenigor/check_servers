@@ -6,6 +6,7 @@ import time
 import os
 import shutil
 import base64
+import re
 from urllib.parse import urlparse, parse_qs
 
 # --- КОНФИГУРАЦИЯ ---
@@ -333,6 +334,24 @@ def fetch_server_configs(url):
                     if server_config:
                         parsed_servers.append(server_config)
             
+            # Фильтрация серверов по регулярному выражению для TXT подписок
+            if parsed_servers: # Только если есть что фильтровать
+                print(f"  Начинаю фильтрацию {len(parsed_servers)} серверов по регулярному выражению...")
+                regex_pattern = r"^(?!.*(?:NA-|RU-)).*(?:(?:TCP-RLT|GRPC-RLT)).*"
+                filtered_servers_by_name = []
+                for server in parsed_servers:
+                    server_name = server.get("name", "")
+                    if re.search(regex_pattern, server_name):
+                        filtered_servers_by_name.append(server)
+                    else:
+                        print(f"  Сервер '{server_name}' не соответствует регулярному выражению, отфильтрован.")
+                
+                if not filtered_servers_by_name:
+                    print(f"  Внимание: После фильтрации по имени не осталось серверов из {url}.")
+                else:
+                    print(f"  После фильтрации по имени осталось {len(filtered_servers_by_name)} серверов.")
+                parsed_servers = filtered_servers_by_name # Заменяем список отфильтрованным
+
             all_servers = parsed_servers # Присваиваем результат в all_servers
         else:
             print(f"  Неподдерживаемый тип контента или расширение файла для {url}: ext='{file_extension}', content-type='{content_type}'. Попытка обработать как YAML.")
