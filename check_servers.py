@@ -669,11 +669,37 @@ def main():
 
             # Запуск xray/v2ray ядра в фоновом режиме
             command = [CORE_EXECUTABLE_PATH, "run", "-c", config_file]
+            process = None # Инициализируем process как None
             try:
-                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                # Захватываем stdout и stderr, используя text=True для автоматического декодирования
+                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8')
                 active_processes.append({"process": process, "config_file": config_file, "server_name": server_name})
                 print(f"  Ядро Xray/V2Ray запущено для {server_name} (PID: {process.pid}). Ожидание для стабилизации...")
-                time.sleep(2) # Даем время ядру запуститься
+                
+                # Небольшая задержка, чтобы дать процессу время что-то вывести, если он падает сразу
+                time.sleep(0.5) 
+
+                # Проверка, не завершился ли процесс xray сразу после запуска
+                if process.poll() is not None:
+                    stdout_data, stderr_data = process.communicate() # Читаем остатки вывода
+                    print(f"  КРИТИЧЕСКАЯ ОШИБКА: Ядро Xray/V2Ray для {server_name} завершилось сразу после запуска с кодом {process.returncode}.")
+                    if stdout_data:
+                        print(f"  XRAY STDOUT ({server_name}):\\n{stdout_data.strip()}")
+                    if stderr_data:
+                        print(f"  XRAY STDERR ({server_name}):\\n{stderr_data.strip()}")
+                    # Нет смысла продолжать с этим сервером, если ядро не запустилось
+                    # Удаляем из списка активных, так как он уже "неактивный"
+                    active_processes.pop() # Удаляем последний добавленный процесс
+                    if os.path.exists(config_file):
+                        try:
+                            os.remove(config_file)
+                        except Exception as e_rem_early:
+                            print(f"  Не удалось удалить конфиг {config_file} для упавшего ядра: {e_rem_early}")
+                    continue # Переходим к следующему серверу
+
+                print(f"  Ядро Xray/V2Ray для {server_name} работает. Ожидание {time.sleep(1.5)} сек...") # Общее время ожидания остается 2с
+                time.sleep(1.5) # Даем время ядру запуститься (оставшиеся 1.5 секунды)
+
 
                 if test_server_connection(server_name):
                     print(f"УСПЕХ: Сервер \'{server_name}\' ({server_details.get('server')}:{server_details.get('port')}) работает.")
@@ -683,32 +709,68 @@ def main():
 
             except Exception as e:
                 print(f"  Ошибка при запуске или тестировании Xray/V2Ray для {server_name}: {e}")
+                # Если процесс был создан, но произошла ошибка до его остановки в блоке finally,
+                # его все равно нужно будет остановить.
+                # Логика остановки в finally должна справиться с этим.
             finally:
-                # Останавливаем процесс и удаляем временный конфиг
-                # Эта логика будет перенесена ниже, чтобы остановить все процессы после цикла
-                pass # processos.terminate() и os.remove() будут ниже
+                # Блок finally здесь был пустым и вся логика остановки была вынесена
+                # ниже, после цикла по всем серверам одной подписки.
+                # Это значит, что если test_server_connection() падает из-за того, что xray не запущен,
+                # процесс (если он был создан) будет остановлен позже.
+                # Наша ранняя проверка process.poll() должна помочь это диагностировать.
+                pass
 
         # Остановка всех активных процессов и удаление временных файлов после проверки всех серверов из текущей подписки
         for proc_info in active_processes:
+            process_to_stop = proc_info['process'] # Извлекаем сам объект процесса
+            server_name_for_stop = proc_info['server_name']
+            config_file_to_delete = proc_info['config_file']
+
             try:
-                print(f"  Остановка процесса для {proc_info['server_name']} (PID: {proc_info['process'].pid})...")
-                proc_info["process"].terminate() # Сначала пытаемся мягко завершить
+                print(f"  Остановка процесса для {server_name_for_stop} (PID: {process_to_stop.pid})...")
+                
+                # Попытка прочитать остаточный вывод перед terminate/kill
+                # Это может быть полезно, если процесс что-то вывел перед завершением
                 try:
-                    proc_info["process"].wait(timeout=5) # Ждем завершения
+                    stdout_data, stderr_data = process_to_stop.communicate(timeout=0.5) # Небольшой таймаут, чтобы не блокировать надолго
+                    if stdout_data:
+                        print(f"  XRAY STDOUT (при остановке {server_name_for_stop}):\\n{stdout_data.strip()}")
+                    if stderr_data:
+                        print(f"  XRAY STDERR (при остановке {server_name_for_stop}):\\n{stderr_data.strip()}")
                 except subprocess.TimeoutExpired:
-                    print(f"  Процесс для {proc_info['server_name']} не завершился вовремя, принудительная остановка (kill)...")
-                    proc_info["process"].kill() # Если не помогло, "убиваем"
-                    proc_info["process"].wait() # Дожидаемся после kill
-                print(f"  Процесс для {proc_info['server_name']} остановлен.")
-            except Exception as e:
-                print(f"  Ошибка при остановке процесса для {proc_info['server_name']}: {e}")
-            finally:
-                if os.path.exists(proc_info["config_file"]):
+                    print(f"  Не удалось получить stdout/stderr от {server_name_for_stop} перед terminate (timeout).")
+                except Exception as e_comm:
+                    print(f"  Ошибка при чтении stdout/stderr от {server_name_for_stop} перед terminate: {e_comm}")
+
+                if process_to_stop.poll() is None: # Если процесс еще работает
+                    process_to_stop.terminate()
                     try:
-                        os.remove(proc_info["config_file"])
-                        # print(f"  Временный файл конфигурации {proc_info['config_file']} удален.")
+                        process_to_stop.wait(timeout=5)
+                        print(f"  Процесс для {server_name_for_stop} остановлен (terminate).")
+                    except subprocess.TimeoutExpired:
+                        print(f"  Процесс для {server_name_for_stop} не завершился вовремя (terminate), принудительная остановка (kill)...")
+                        process_to_stop.kill()
+                        try:
+                            process_to_stop.wait(timeout=5) # Ждем завершения после kill
+                            print(f"  Процесс для {server_name_for_stop} остановлен (kill).")
+                        except subprocess.TimeoutExpired:
+                            print(f"  ПРЕДУПРЕЖДЕНИЕ: Процесс для {server_name_for_stop} не завершился даже после kill.")
+                        except Exception as e_wait_kill:
+                            print(f"  Ошибка при ожидании завершения процесса {server_name_for_stop} после kill: {e_wait_kill}")
+                    except Exception as e_wait_term:
+                        print(f"  Ошибка при ожидании завершения процесса {server_name_for_stop} после terminate: {e_wait_term}")
+                else:
+                    print(f"  Процесс для {server_name_for_stop} уже был остановлен (код: {process_to_stop.returncode}).")
+
+            except Exception as e:
+                print(f"  Ошибка при остановке процесса для {server_name_for_stop}: {e}")
+            finally:
+                if os.path.exists(config_file_to_delete):
+                    try:
+                        os.remove(config_file_to_delete)
+                        # print(f"  Временный файл конфигурации {config_file_to_delete} удален.")
                     except Exception as e_rem:
-                        print(f"  Не удалось удалить временный файл {proc_info['config_file']}: {e_rem}")
+                        print(f"  Не удалось удалить временный файл {config_file_to_delete}: {e_rem}")
 
 
         if good_servers_for_this_subscription:
