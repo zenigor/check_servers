@@ -1,1 +1,2 @@
 https://github.com/Epodonios/v2ray-configs/raw/main/Splitted-By-Protocol/vless.txt
+https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml
