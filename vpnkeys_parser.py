@@ -22,8 +22,9 @@ def parse_vless_keys(html_content):
     Returns:
         list: List of valid VLESS keys
     """
-    # Regular expression to find VLESS URLs
-    vless_pattern = r'vless://[^"\s<>]+'
+    # Regular expression to find VLESS URLs with complete names including flags and cities
+    # This pattern captures everything until a quote, space, or HTML tag
+    vless_pattern = r'vless://[^"<>]+'
     
     # Find all matches
     all_matches = re.findall(vless_pattern, html_content)
@@ -80,18 +81,10 @@ def save_subscription_file(keys, output_file="vpnkeys_subscription.txt"):
         bool: True if successful, False otherwise
     """
     try:
-        # Use shell-like approach to extract full VLESS URLs with complete names
-        # This ensures we get the full names including country flags and city names
-        lines = []
-        for key in keys:
-            # Extract the full URL with complete name after #
-            lines.append(key)
-        
-        # Write the full URLs to the subscription file
         with open(output_file, 'w', encoding='utf-8') as f:
-            for line in lines:
-                f.write(f"{line}\n")
-        
+            for key in keys:
+                # Write the full URL with complete name including country flag and city
+                f.write(f"{key}\n")
         return True
     except Exception as e:
         print(f"Error saving subscription file: {e}")
