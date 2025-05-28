@@ -5,6 +5,9 @@ on:
     - cron: '0 * * * *' # Запускать каждый час
   workflow_dispatch: # Позволяет запускать вручную
 
+permissions: # Добавляем права на запись контента
+  contents: write
+
 jobs:
   parse_and_commit:
     runs-on: ubuntu-latest
