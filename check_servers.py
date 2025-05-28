@@ -8,6 +8,10 @@ import shutil
 import base64
 import re
 from urllib.parse import urlparse, parse_qs
+import urllib3 # Добавлено для отключения предупреждений
+
+# Отключаем InsecureRequestWarning
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # --- КОНФИГУРАЦИЯ ---
 # SERVERS_YAML_URL = "https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml" # Заменено на чтение из файла
