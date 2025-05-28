@@ -1,391 +1,371 @@
 proxies:
-- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
-  server: 37.19.198.160
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇺🇸US-37.19.198.236-0305 | 100.128MB
-  server: 37.19.198.236
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇺🇸US-37.19.198.243-0308 | 99.057MB
-  server: 37.19.198.243
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇺🇸US-37.19.198.244-0306 | 98.761MB
-  server: 37.19.198.244
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇺🇸US-149.28.106.134-0300 | 87.39MB
-  server: 149.28.106.134
-  port: 31444
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 46e67f5a-63e4-4566-870c-76eaa9cf76fe
-- name: 🇺🇸US-156.146.38.168-0297 | 70.002MB
-  server: 156.146.38.168
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇺🇸US-156.146.38.167-0298 | 69.686MB
-  server: 156.146.38.167
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇺🇸US-156.146.38.170-0296 | 65.673MB
+- name: 🇺🇸US-156.146.38.170-0284 | 120.071MB
   server: 156.146.38.170
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-173.244.56.6-0287 | 55.21MB
-  server: 173.244.56.6
+- name: 🇺🇸US-156.146.38.167-0283 | 92.821MB
+  server: 156.146.38.167
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-173.244.56.9-0288 | 47.849MB
+- name: 🇺🇸US-149.28.106.134-0279 | 89.902MB
+  server: 149.28.106.134
+  port: 31444
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 46e67f5a-63e4-4566-870c-76eaa9cf76fe
+- name: 🇺🇸US-37.19.198.160-0275 | 86.283MB
+  server: 37.19.198.160
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-156.146.38.168-0282 | 85.266MB
+  server: 156.146.38.168
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-37.19.198.243-0277 | 83.003MB
+  server: 37.19.198.243
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-37.19.198.236-0276 | 73.374MB
+  server: 37.19.198.236
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-173.244.56.9-0287 | 66.236MB
   server: 173.244.56.9
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇨🇦CA-79.127.233.170-5372 | 43.547MB
-  server: 79.127.233.170
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
-- name: 🇺🇸US-212.102.47.131-0290 | 42.336MB
-  server: 212.102.47.131
+- name: 🇺🇸US-173.244.56.6-0286 | 65.1MB
+  server: 173.244.56.6
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-212.102.47.130-0291 | 41.816MB
+- name: 🇺🇸US-37.19.198.244-0278 | 64.574MB
+  server: 37.19.198.244
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇺🇸US-212.102.47.130-0294 | 63.528MB
   server: 212.102.47.130
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-212.102.47.129-0289 | 41.726MB
+- name: 🇺🇸US-212.102.47.129-0296 | 61.307MB
   server: 212.102.47.129
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇫🇷FR-107.191.63.241-0346 | 37.611MB
-  server: 107.191.63.241
-  port: 30665
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 44fe4b7d-cd48-45fc-a036-60ea40e4a96c
-- name: 🇬🇧GB-212.102.53.198-0350 | 37.093MB
-  server: 212.102.53.198
+- name: 🇺🇸US-212.102.47.131-0293 | 60.49MB
+  server: 212.102.47.131
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇬🇧GB-212.102.53.197-0370 | 36.554MB
-  server: uk-dc1.yangon.club
+- name: 🇺🇸US-212.102.47.132-0291 | 60.113MB
+  server: 212.102.47.132
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇬🇧GB-212.102.53.194-0127 | 36.554MB
-  server: 212.102.53.194
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-212.102.53.80-0354 | 36.525MB
-  server: 212.102.53.80
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-212.102.53.78-0358 | 35.609MB
-  server: 212.102.53.78
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-85.210.120.237-0382 | 35.571MB
-  server: series-a2-me.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: Bog0ELmMM9DSxDdQ
-- name: 🇬🇧GB-85.210.120.237-0376 | 35.484MB
-  server: series-a2-me.varzesh360.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: Bog0ELmMM9DSxDdQ
-- name: 🇬🇧GB-212.102.53.195-0359 | 35.391MB
-  server: 212.102.53.195
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-212.102.53.196-0413 | 35.348MB
-  server: 212.102.53.196
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-85.210.120.237-0390 | 34.869MB
-  server: admin.c3.webramz.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: Bog0ELmMM9DSxDdQ
-- name: 🇳🇱NL-149.34.244.68-0366 | 34.759MB
-  server: 149.34.244.68
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-212.102.53.81-0402 | 34.454MB
-  server: 212.102.53.81
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-212.102.53.79-0355 | 34.23MB
-  server: 212.102.53.79
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-212.102.53.193-0348 | 34.078MB
-  server: 212.102.53.193
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-131.145.124.17-0391 | 33.638MB
-  server: series-a2-mec.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: u17T3BvpYaaiuW2c
-- name: 🇬🇧GB-85.210.222.97-0389 | 32.813MB
-  server: admin.c4.webramz.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 69MUii7VDwMqh7Hz
-- name: 🇬🇧GB-131.145.124.17-0387 | 32.477MB
-  server: api.namasha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: u17T3BvpYaaiuW2c
-- name: 🇬🇧GB-131.145.124.17-0394 | 32.39MB
-  server: admin.c2.webramz.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: WstuSnlu4ieA9M0L
-- name: 🇬🇧GB-131.145.124.103-0386 | 31.891MB
-  server: freakconfig13.felafel.org
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
-- name: 🇬🇧GB-131.145.124.103-0400 | 29.975MB
-  server: series-a2.varzesh360.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: mps3FwmDjLrWaOVg
-- name: 🇬🇧GB-212.102.53.197-0361 | 29.463MB
-  server: 212.102.53.197
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-131.145.124.103-0395 | 29.207MB
-  server: series-a1.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
-- name: 🇬🇧GB-131.145.124.103-0392 | 29.144MB
-  server: admin.c1.webramz.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
-- name: 🇬🇧GB-131.145.124.103-0393 | 28.973MB
-  server: series-a2.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
-- name: 🇨🇦CA-149.22.95.183-0294 | 28.38MB
+- name: 🇨🇦CA-149.22.95.183-0354 | 44.664MB
   server: 149.22.95.183
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇬🇧GB-131.145.124.17-0396 | 27.138MB
-  server: series-a2-mec.varzesh360.co
+- name: 🇬🇧GB-212.102.53.194-0125 | 34.028MB
+  server: 212.102.53.194
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.197-0349 | 33.77MB
+  server: 212.102.53.197
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.80-0326 | 33.223MB
+  server: 212.102.53.80
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.197-0324 | 32.897MB
+  server: uk-dc1.yangon.club
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.198-0320 | 32.887MB
+  server: 212.102.53.198
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.78-0328 | 32.79MB
+  server: 212.102.53.78
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.195-0331 | 32.715MB
+  server: 212.102.53.195
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.79-0337 | 32.495MB
+  server: 212.102.53.79
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.81-0336 | 32.4MB
+  server: 212.102.53.81
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.193-0339 | 32.13MB
+  server: 212.102.53.193
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.196-0332 | 32.099MB
+  server: 212.102.53.196
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇫🇷FR-107.191.63.241-0319 | 31.86MB
+  server: 107.191.63.241
+  port: 30665
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 44fe4b7d-cd48-45fc-a036-60ea40e4a96c
+- name: 🇬🇧GB-85.210.120.237-0330 | 30.969MB
+  server: series-a2-me.varzesh360.co
   port: 443
   type: ss
   cipher: chacha20-ietf-poly1305
-  password: u17T3BvpYaaiuW2c
-- name: 🇬🇧GB-85.210.120.237-0383 | 26.06MB
+  password: Bog0ELmMM9DSxDdQ
+- name: 🇬🇧GB-85.210.120.237-0256 | 30.492MB
   server: 85.210.120.237
   port: 443
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Bog0ELmMM9DSxDdQ
-- name: CH-156.146.62.163-0388 | 24.756MB
-  server: 156.146.62.163
+- name: 🇬🇧GB-131.145.5.20-0348 | 30.01MB
+  server: series-a2.varzesh360.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: mps3FwmDjLrWaOVg
+- name: 🇬🇧GB-85.210.120.237-0329 | 30.002MB
+  server: series-a2-me.samanehha.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: Bog0ELmMM9DSxDdQ
+- name: 🇬🇧GB-74.177.243.212-0342 | 29.882MB
+  server: admin.c4.webramz.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 69MUii7VDwMqh7Hz
+- name: 🇬🇧GB-13.87.97.150-0344 | 29.747MB
+  server: api.namasha.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: u17T3BvpYaaiuW2c
+- name: 🇬🇧GB-85.210.120.237-0333 | 29.55MB
+  server: admin.c3.webramz.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: Bog0ELmMM9DSxDdQ
+- name: 🇳🇱NL-149.34.244.68-0334 | 29.351MB
+  server: 149.34.244.68
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: CH-156.146.62.164-0407 | 23.906MB
-  server: 156.146.62.164
+- name: 🇬🇧GB-13.87.97.150-0345 | 28.904MB
+  server: admin.c2.webramz.co
   port: 443
   type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: CZ-195.181.160.6-0377 | 22.177MB
+  cipher: chacha20-ietf-poly1305
+  password: WstuSnlu4ieA9M0L
+- name: 🇬🇧GB-13.87.97.150-0341 | 28.761MB
+  server: series-a2-mec.samanehha.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: u17T3BvpYaaiuW2c
+- name: 🇬🇧GB-131.145.5.20-0352 | 28.672MB
+  server: series-a2.samanehha.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: W74XFALLLuw6m5IA
+- name: 🇬🇧GB-131.145.5.20-0347 | 28.657MB
+  server: freakconfig13.felafel.org
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 1xO2cqPazqjGfCfd
+- name: 🇬🇧GB-131.145.5.20-0351 | 28.608MB
+  server: admin.c1.webramz.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 1xO2cqPazqjGfCfd
+- name: 🇬🇧GB-131.145.5.20-0350 | 28.272MB
+  server: series-a1.samanehha.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: W74XFALLLuw6m5IA
+- name: CZ-195.181.160.6-0366 | 27.844MB
   server: 195.181.160.6
   port: 990
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
-- name: CH-156.146.62.161-0415 | 18.628MB
-  server: 156.146.62.161
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-141.98.101.178-0404 | 17.22MB
-  server: 141.98.101.178
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: FI-77.91.103.73-0384 | 12.782MB
+- name: FI-77.91.103.73-0381 | 26.572MB
   server: 77.91.103.73
   port: 443
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Lcc1lw8IP2KI
-- name: CH-156.146.62.162-0381 | 12.603MB
+- name: CH-156.146.62.164-0364 | 26.569MB
+  server: 156.146.62.164
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: CH-156.146.62.161-0369 | 26.087MB
+  server: 156.146.62.161
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-13.87.97.150-0355 | 26.063MB
+  server: series-a2-mec.varzesh360.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: u17T3BvpYaaiuW2c
+- name: 🇬🇧GB-141.98.101.178-0372 | 24.711MB
+  server: 141.98.101.178
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: CH-156.146.62.163-0361 | 24.514MB
+  server: 156.146.62.163
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: CH-156.146.62.162-0383 | 24.456MB
   server: 156.146.62.162
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇵🇱PL-45.144.48.63-0403 | 12.385MB
-  server: war.ssvpnapp.win
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: d3837224ed465f00
-- name: 🇵🇱PL-45.144.48.63-0410 | 11.193MB
-  server: 45.144.48.63
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: d3837224ed465f00
-- name: 🇷🇺RU-45.151.62.54-5440 | 8.485MB
+- name: 🇷🇺RU-45.151.62.54-0391 | 23.276MB
   server: 45.151.62.54
   port: 28825
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0zyDRZ1XmNXaaCAN7KEA8a
-- name: 🇯🇵JP-149.22.87.241-0317 | 6.84MB
+- name: 🇯🇵JP-149.22.87.241-0393 | 21.906MB
   server: 149.22.87.241
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇯🇵JP-149.22.87.204-0314 | 5.687MB
+- name: 🇯🇵JP-149.22.87.204-0398 | 21.586MB
   server: 149.22.87.204
   port: 443
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇪🇸ES-92.38.171.215-5382 | 4.917MB
-  server: 92.38.171.215
-  port: 31348
+- name: 🇵🇱PL-45.144.48.63-0384 | 20.169MB
+  server: war.ssvpnapp.win
+  port: 57456
   type: ss
   cipher: chacha20-ietf-poly1305
-  password: 0RsrcFJ1vOsWEqg3P55hvaacKfuShT0cc1h0t8AD0NA8u1uR
-- name: 🇯🇵JP-139.162.106.142-0318 | 4.783MB
-  server: 139.162.106.142
-  port: 11359
+  password: d3837224ed465f00
+- name: 🇵🇱PL-45.144.48.63-0386 | 19.814MB
+  server: 45.144.48.63
+  port: 57456
   type: ss
-  cipher: aes-256-gcm
-  password: tVPVlUgQhj9i7vHOHij3daCJEUZxctEQ9xoj0WT5A8w=
-- name: 🇰🇷KR-141.164.63.32-0319 | 4.658MB
+  cipher: chacha20-ietf-poly1305
+  password: d3837224ed465f00
+- name: 🇰🇷KR-141.164.63.32-0403 | 18.931MB
   server: 141.164.63.32
   port: 30936
   type: ss
   cipher: chacha20-ietf-poly1305
   password: b25727df-15ea-453c-a006-13fe98fee1d2
-- name: 🇺🇸US-156.146.38.169-0295 | 4.421MB
-  server: 156.146.38.169
-  port: 443
+- name: 🇪🇸ES-92.38.171.215-0401 | 18.831MB
+  server: 92.38.171.215
+  port: 31348
   type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇷🇺RU-5.189.201.250-0433 | 4.18MB
+  cipher: chacha20-ietf-poly1305
+  password: 0RsrcFJ1vOsWEqg3P55hvaacKfuShT0cc1h0t8AD0NA8u1uR
+- name: 🇯🇵JP-139.162.106.142-0402 | 17.692MB
+  server: 139.162.106.142
+  port: 11359
+  type: ss
+  cipher: aes-256-gcm
+  password: tVPVlUgQhj9i7vHOHij3daCJEUZxctEQ9xoj0WT5A8w=
+- name: 🇷🇺RU-5.189.201.250-0409 | 12.851MB
   server: 5.189.201.250
   port: 31348
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: RELAY-104.21.96.1-0423 | 3.206MB
-  server: 104.21.96.1
-  port: 2096
-  type: vmess
-  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
-  alterId: 0
-  cipher: auto
-  tls: tls
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: de01.sh-cloudflare.sbs
-- name: 🇪🇸ES-45.154.206.192-0443 | 3.079MB
-  server: 45.154.206.192
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
-- name: 🇨🇦CA-142.4.216.225-0419 | 2.879MB
-  server: 142.4.216.225
-  port: 80
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: JIhN6rBKkaEboLNXVSv5rq
-- name: 🇨🇦CA-142.4.216.225-0417 | 2.772MB
+- name: 🇨🇦CA-142.4.216.225-0425 | 12.46MB
   server: ca225.vpnbook.com
   port: 80
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
-- name: RELAY-104.21.96.1-0431 | 2.745MB
+- name: 🇨🇦CA-142.4.216.225-0421 | 10.809MB
+  server: 142.4.216.225
+  port: 80
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: JIhN6rBKkaEboLNXVSv5rq
+- name: 🇪🇸ES-45.154.206.192-0417 | 9.2MB
+  server: 45.154.206.192
+  port: 990
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: f8f7aCzcPKbsF8p3
+- name: RELAY-104.21.96.1-0426 | 7.932MB
   server: 104.21.96.1
   port: 2087
   type: vmess
@@ -399,13 +379,7 @@ proxies:
     path: /
     headers:
       Host: rak1d3.777269.xyz
-- name: CH-204.136.10.115-0458 | 2.709MB
-  server: 204.136.10.115
-  port: 1866
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: oXGp1+ihlfKg826H
-- name: RELAY-104.21.112.1-0432 | 2.056MB
+- name: RELAY-104.21.112.1-0434 | 6.706MB
   server: 104.21.112.1
   port: 2087
   type: vmess
@@ -419,13 +393,31 @@ proxies:
     path: /
     headers:
       Host: rak1d3.777269.xyz
-- name: 🇷🇺RU-45.139.24.24-0399 | 1.521MB
-  server: 45.139.24.24
-  port: 57456
+- name: TR-185.123.101.241-5336 | 6.237MB
+  server: 185.123.101.241
+  port: 990
   type: ss
   cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
-- name: BE-192.71.249.146-0483 | 1.076MB
+  password: f8f7aCzcPKbsF8p3
+- name: 🇩🇪DE-185.177.229.245-0974 | 5.607MB
+  server: 185.177.229.245
+  port: 1866
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: oXGp1+ihlfKg826H
+- name: 🇫🇷FR-51.195.119.47-5255 | 5.527MB
+  server: 51.195.119.47
+  port: 1080
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: qXvO7zYU7KeaB0Md7DQLow
+- name: CH-204.136.10.115-0427 | 4.208MB
+  server: 204.136.10.115
+  port: 1866
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: oXGp1+ihlfKg826H
+- name: BE-192.71.249.146-0470 | 1.997MB
   server: 192.71.249.146
   port: 990
   type: ss
