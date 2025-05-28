@@ -92,7 +92,7 @@ def main():
     """Main function."""
     # Get the directory where the script is located
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_file = os.path.join(script_dir, "vless_subscription.txt")
+    output_file = os.path.join(script_dir, "vpnkeys_subscription.txt")
     
     # Check if HTML file is provided as argument
     if len(sys.argv) > 1 and os.path.exists(sys.argv[1]):
