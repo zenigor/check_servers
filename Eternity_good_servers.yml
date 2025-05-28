@@ -251,12 +251,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
-- name: FI-77.91.103.73-0381 | 26.572MB
-  server: 77.91.103.73
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: Lcc1lw8IP2KI
 - name: CH-156.146.62.164-0364 | 26.569MB
   server: 156.146.62.164
   port: 443
@@ -423,12 +417,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
-- name: SE-62.60.231.81-0400 | 3.791MB
-  server: 62.60.231.81
-  port: 59945
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: VfaEatGj7iXncVpijKFC1e
 - name: BE-192.71.249.146-0470 | 1.997MB
   server: 192.71.249.146
   port: 990
