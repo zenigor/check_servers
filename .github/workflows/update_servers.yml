@@ -13,6 +13,9 @@ permissions: # <--- ДОБАВЛЕНО: Разрешения для workflow
 jobs:
   build_and_update_list:
     runs-on: windows-latest # Используем Windows, т.к. у вас xray.exe
+    concurrency: # <--- ДОБАВЛЕНО: Настройка параллелизма
+      group: ${{ github.workflow }}-${{ github.ref }} # Группа уникальна для этого workflow и ветки
+      cancel-in-progress: false # Новый запуск будет ждать, а не отменять текущий
 
     steps:
       # 1. Клонируем ваш репозиторий, чтобы получить доступ к скрипту и xray.exe
