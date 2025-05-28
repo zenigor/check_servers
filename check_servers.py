@@ -670,7 +670,7 @@ def test_server_connection(server_name):
     headers = {"User-Agent": USER_AGENT}
 
     # --- Начало: Предварительная проверка ---
-    print(f"  Предварительная проверка: {server_name} -> {PRE_CHECK_URL}")
+    # print(f"  Предварительная проверка: {server_name} -> {PRE_CHECK_URL}")
     try:
         # Используем stream=True, чтобы не загружать тело ответа, если оно вдруг будет
         # Для generate_204 тело не ожидается, но это хорошая практика
@@ -679,19 +679,19 @@ def test_server_connection(server_name):
         if response_pre.status_code == 204:
             print(f"  Предварительная проверка УСПЕХ: Сервер '{server_name}' достиг {PRE_CHECK_URL}.")
         else:
-            print(f"  Предварительная проверка ОШИБКА: Сервер '{server_name}' к {PRE_CHECK_URL} вернул статус {response_pre.status_code} (ожидался 204).")
+            # print(f"  Предварительная проверка ОШИБКА: Сервер '{server_name}' к {PRE_CHECK_URL} вернул статус {response_pre.status_code} (ожидался 204).")
             return False # Если предварительная проверка не прошла, дальше не идем
         # Закрываем соединение, так как использовали stream=True
         response_pre.close()
 
     except requests.exceptions.Timeout:
-        print(f"  Предварительная проверка ОШИБКА (Таймаут): Сервер '{server_name}' не ответил на {PRE_CHECK_URL} за {PRE_CHECK_TIMEOUT} сек.")
+        # print(f"  Предварительная проверка ОШИБКА (Таймаут): Сервер '{server_name}' не ответил на {PRE_CHECK_URL} за {PRE_CHECK_TIMEOUT} сек.")
         return False
     except requests.exceptions.ProxyError as e:
-        print(f"  Предварительная проверка ОШИБКА (Прокси): Сервер '{server_name}' к {PRE_CHECK_URL}. {e}")
+        # print(f"  Предварительная проверка ОШИБКА (Прокси): Сервер '{server_name}' к {PRE_CHECK_URL}. {e}")
         return False
     except requests.exceptions.RequestException as e:
-        print(f"  Предварительная проверка ОШИБКА (Соединение): Сервер '{server_name}' к {PRE_CHECK_URL}. {e}")
+        # print(f"  Предварительная проверка ОШИБКА (Соединение): Сервер '{server_name}' к {PRE_CHECK_URL}. {e}")
         return False
     # --- Конец: Предварительная проверка ---
 
