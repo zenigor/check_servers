@@ -353,7 +353,7 @@ def format_vless_link(details):
         link += f"#{encoded_name}"
     return link
 
-def fetch_server_configs(url):
+def fetch_server_configs(url, custom_regex_pattern=None):
     print(f"Скачивание и обработка подписки: {url}...")
     original_filename = os.path.basename(urlparse(url).path)
     if not original_filename: # Если URL заканчивается на / или не содержит пути
@@ -472,23 +472,23 @@ def fetch_server_configs(url):
                     if server_config:
                         parsed_servers.append(server_config)
             
-            # Фильтрация серверов по регулярному выражению для TXT подписок
-            if parsed_servers: # Только если есть что фильтровать
-                print(f"  Начинаю фильтрацию {len(parsed_servers)} серверов по регулярному выражению...")
-                regex_pattern = r"^(?!.*(?:NA-|RU-)).*(?:\b(?:TCP-RLT|GRPC-RLT)\b).*"
-                filtered_servers_by_name = []
-                for server in parsed_servers:
-                    server_name = server.get("name", "")
-                    if re.search(regex_pattern, server_name):
-                        filtered_servers_by_name.append(server)
-                    # else: # Убираем вывод отфильтрованных серверов
-                    #     print(f"  Сервер '{server_name}' не соответствует регулярному выражению, отфильтрован.")
+            # Фильтрация серверов по регулярному выражению для TXT подписок - ЭТОТ БЛОК БУДЕТ УДАЛЕН
+            # if parsed_servers: # Только если есть что фильтровать
+            #     print(f"  Начинаю фильтрацию {len(parsed_servers)} серверов по регулярному выражению...")
+            #     regex_pattern = r"^(?!.*(?:NA-|RU-)).*(?:\b(?:TCP-RLT|GRPC-RLT)\b).*" 
+            #     filtered_servers_by_name = []
+            #     for server in parsed_servers:
+            #         server_name = server.get("name", "")
+            #         if re.search(regex_pattern, server_name):
+            #             filtered_servers_by_name.append(server)
+            #         # else: # Убираем вывод отфильтрованных серверов
+            #         #     print(f"  Сервер '{server_name}' не соответствует регулярному выражению, отфильтрован.")
                 
-                if not filtered_servers_by_name:
-                    print(f"  Внимание: После фильтрации по имени не осталось серверов из {url}.")
-                else:
-                    print(f"  После фильтрации по имени осталось {len(filtered_servers_by_name)} серверов.")
-                parsed_servers = filtered_servers_by_name # Заменяем список отфильтрованным
+            #     if not filtered_servers_by_name:
+            #         print(f"  Внимание: После фильтрации по имени не осталось серверов из {url}.")
+            #     else:
+            #         print(f"  После фильтрации по имени осталось {len(filtered_servers_by_name)} серверов.")
+            #     parsed_servers = filtered_servers_by_name # Заменяем список отфильтрованным
 
             all_servers = parsed_servers # Присваиваем результат в all_servers
         else:
@@ -527,6 +527,35 @@ def fetch_server_configs(url):
             if not server.get("name"):
                 server["name"] = f"{server.get('type', 'server')}_{i+1}"
             # Дополнительная обработка/валидация полей может быть здесь
+
+        # Новый блок универсальной фильтрации
+        if custom_regex_pattern and all_servers:
+            print(f"  Применение пользовательского регулярного выражения к {len(all_servers)} серверам: {custom_regex_pattern}")
+            original_server_count_for_filter = len(all_servers) # Сохраняем для лога
+            temp_filtered_servers = []
+            regex_is_valid = True
+            try:
+                # Проверяем валидность регулярного выражения один раз перед циклом
+                re.compile(custom_regex_pattern)
+            except re.error as e:
+                print(f"  Ошибка в синтаксисе регулярного выражения '{custom_regex_pattern}': {e}. Фильтрация по этому РВ для подписки {url} будет пропущена.")
+                regex_is_valid = False
+
+            if regex_is_valid:
+                for server in all_servers:
+                    server_name = server.get("name", "")
+                    if re.search(custom_regex_pattern, server_name):
+                        temp_filtered_servers.append(server)
+                    # else: # Для отладки можно раскомментировать
+                    #     print(f"  Сервер '{server_name}' (из {url}) не соответствует РВ '{custom_regex_pattern}', отфильтрован.")
+                
+                all_servers = temp_filtered_servers # Обновляем all_servers результатом фильтрации
+
+                if not all_servers: # Если после фильтрации ничего не осталось
+                    print(f"  Внимание: После фильтрации по РВ '{custom_regex_pattern}' не осталось серверов из {original_server_count_for_filter} (URL: {url}).")
+                elif len(all_servers) < original_server_count_for_filter : # Если что-то было отфильтровано
+                    print(f"  После фильтрации по РВ '{custom_regex_pattern}' осталось {len(all_servers)} из {original_server_count_for_filter} серверов (URL: {url}).")
+                # Если количество не изменилось, значит все серверы совпали с РВ (или РВ было таким, что ничего не отфильтровало) - не логируем отдельно.
 
         return all_servers, output_filename_base
 
@@ -736,22 +765,37 @@ def main():
         with open(SUBSCRIPTIONS_FILENAME, 'w') as f:
             f.write("# Пример:\\n")
             f.write("# https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml\\n")
-            f.write("# https://example.com/another_subscription.txt\\n")
+            f.write("# https://example.com/another_subscription.txt | ВашеРегулярноеВыражениеДляИменСерверов\\n") # Обновлен пример
         print(f"Создан пустой файл '{SUBSCRIPTIONS_FILENAME}'. Заполните его и перезапустите скрипт.")
         return
 
-    with open(SUBSCRIPTIONS_FILENAME, 'r') as f:
-        subscription_urls = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    subscriptions_data = []  # Новый код
+    with open(SUBSCRIPTIONS_FILENAME, 'r', encoding='utf-8') as f: # Новый код, добавлен encoding
+        for line in f: # Новый код
+            line = line.strip() # Новый код
+            if not line or line.startswith("#"): # Новый код
+                continue # Новый код
+            parts = line.split('|', 1) # Новый код
+            url = parts[0].strip() # Новый код
+            regex_pattern_str = parts[1].strip() if len(parts) > 1 else None # Новый код
+            subscriptions_data.append({"url": url, "regex": regex_pattern_str}) # Новый код
 
-    if not subscription_urls:
+
+    if not subscriptions_data: # Новый код
         print(f"Файл с подписками '{SUBSCRIPTIONS_FILENAME}' пуст или содержит только комментарии.")
         return
 
     all_good_servers_overall_count = 0
 
-    for sub_url in subscription_urls:
+    for sub_data in subscriptions_data: # Новый код
+        sub_url = sub_data["url"] # Новый код
+        custom_regex = sub_data["regex"] # Новый код
+
         print(f"\n--- Обработка подписки: {sub_url} ---")
-        server_configs, output_filename_base = fetch_server_configs(sub_url)
+        if custom_regex: # Новый код
+            print(f"  Будет применено регулярное выражение для фильтрации имен: {custom_regex}") # Новый код
+        
+        server_configs, output_filename_base = fetch_server_configs(sub_url, custom_regex) # Новый код
 
         if not server_configs:
             print(f"Не удалось получить или обработать конфигурации серверов для {sub_url}. Пропуск.")
@@ -968,7 +1012,7 @@ def main():
             print(f"Для подписки {sub_url} не найдено работающих серверов.")
 
     print(f"\n\n--- Итог ---")
-    print(f"Всего протестировано подписок: {len(subscription_urls)}")
+    print(f"Всего протестировано подписок: {len(subscriptions_data)}")
     print(f"Общее количество найденных и сохраненных хороших серверов: {all_good_servers_overall_count}")
     if os.path.exists(TEMP_CONFIG_FILENAME):
         try:
