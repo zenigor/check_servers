@@ -118,6 +118,7 @@ def main():
     # Save to subscription file
     if save_subscription_file(vless_keys, output_file):
         print(f"Subscription file saved to: {output_file}")
+        print(f"output_filename={os.path.basename(output_file)}")
     else:
         print("Failed to save subscription file")
 
