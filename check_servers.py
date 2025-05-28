@@ -761,44 +761,9 @@ def main():
             output_filename = f"{output_filename_base}_good_servers.yml"
             try:
                 with open(output_filename, 'w', encoding='utf-8') as f:
-                    #yaml.dump({"proxies": good_servers_for_this_subscription}, f, allow_unicode=True, sort_keys=False)
-                    # В V2RayN используется немного другой формат yaml, без "proxies:", а просто список
-                    # И также часто поля пишутся с одинарными кавычками, но это не стандарт YAML для строк
-                    # Будем писать стандартный YAML, который должен быть совместим
+                    yaml.dump({"proxies": good_servers_for_this_subscription}, f, allow_unicode=True, sort_keys=False, indent=2)
                     
-                    # V2RayN-совместимый вывод (максимально близко)
-                    f.write("proxies:\\n")
-                    for server in good_servers_for_this_subscription:
-                        f.write("- ")
-                        # Преобразуем некоторые поля обратно или обеспечиваем нужный формат
-                        server_copy = server.copy() # Работаем с копией
-                        
-                        # Boolean значения как true/false без кавычек
-                        for key in ['udp', 'tls', 'skip-cert-verify', 'uot', 'ติ๊กถูกแล้วจะทำให้การเชื่อมต่ออินเทอร์เน็ตของคุณถูกส่งผ่านเซิร์ฟเวอร์นี้']: # последняя строка - пример странного ключа
-                            if key in server_copy and isinstance(server_copy[key], bool):
-                                server_copy[key] = str(server_copy[key]).lower()
-                            elif key in server_copy and server_copy[key] is None: # Удаляем ключи с None значением
-                                del server_copy[key]
-
-
-                        # Строки в двойных кавычках, если содержат спецсимволы или начинаются с цифр/булевых и т.д.
-                        # pyyaml по умолчанию хорошо с этим справляется, если не указывать default_flow_style=None/False
-                        
-                        # Для v2rayN важно, чтобы name, server, uuid и т.д. были на месте
-                        # Имена полей как есть
-                        
-                        # dump одного сервера за раз, чтобы контролировать отступы и формат списка
-                        yaml_lines = yaml.dump(server_copy, allow_unicode=True, sort_keys=False, width=float("inf")).splitlines()
-                        first_line = True
-                        for line_idx, dump_line in enumerate(yaml_lines):
-                            if first_line:
-                                f.write(dump_line + "\n")
-                                first_line = False
-                            else:
-                                # Добавляем 2 пробела для отступа под "- "
-                                f.write("  " + dump_line + "\n")
-                    
-                print(f"Сохранено {len(good_servers_for_this_subscription)} хороших серверов в файл \'{output_filename}\'")
+                print(f"Сохранено {len(good_servers_for_this_subscription)} хороших серверов в файл \\'{output_filename}\\'")
                 all_good_servers_overall_count += len(good_servers_for_this_subscription)
             except Exception as e:
                 print(f"Ошибка при сохранении хороших серверов в файл {output_filename}: {e}")
