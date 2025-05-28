@@ -1,4 +1,5 @@
-proxies:\n- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
+proxies:
+- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
   server: 37.19.198.160
   port: 443
   type: ss
@@ -58,12 +59,6 @@ proxies:\n- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇨🇦CA-79.127.233.170-5372 | 43.547MB
-  server: 79.127.233.170
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
 - name: 🇺🇸US-212.102.47.132-0292 | 42.68MB
   server: 212.102.47.132
   port: 443
@@ -372,7 +367,7 @@ proxies:\n- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
   alterId: 0
   cipher: auto
   tls: tls
-  skip-cert-verify: 'false'
+  skip-cert-verify: false
   network: ws
   ws-opts:
     path: /
@@ -386,7 +381,7 @@ proxies:\n- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
   alterId: 0
   cipher: auto
   tls: tls
-  skip-cert-verify: 'false'
+  skip-cert-verify: false
   network: ws
   ws-opts:
     path: /
@@ -418,7 +413,7 @@ proxies:\n- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
   alterId: 0
   cipher: auto
   tls: tls
-  skip-cert-verify: 'false'
+  skip-cert-verify: false
   network: ws
   ws-opts:
     path: /
@@ -438,7 +433,7 @@ proxies:\n- name: 🇺🇸US-37.19.198.160-0304 | 105.083MB
   alterId: 0
   cipher: auto
   tls: tls
-  skip-cert-verify: 'false'
+  skip-cert-verify: false
   network: ws
   ws-opts:
     path: /
