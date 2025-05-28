@@ -7,7 +7,7 @@ import os
 import shutil
 import base64
 import re
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, urlencode
 import urllib3 # Добавлено для отключения предупреждений
 
 # Отключаем InsecureRequestWarning
@@ -219,6 +219,139 @@ def parse_vmess_vless_link(link, link_type="vmess"):
     except Exception as e:
         print(f"  Ошибка парсинга {link_type} ссылки {link}: {e}")
         return None
+
+def format_trojan_link(details):
+    password = details.get("password", "")
+    server = details.get("server", "")
+    port = details.get("port", "")
+    name = details.get("name", "")
+    # trojan://password@server:port#name
+    link = f"trojan://{password}@{server}:{port}"
+    if name:
+        link += f"#{requests.utils.quote(name)}"
+    return link
+
+def format_ss_link(details):
+    cipher = details.get("cipher", "")
+    password = details.get("password", "")
+    server = details.get("server", "")
+    port = details.get("port", "")
+    name = details.get("name", "")
+    # ss://base64_encode(cipher:password@server:port)#name
+    auth_part = f"{cipher}:{password}@{server}:{port}"
+    encoded_auth_part = base64.urlsafe_b64encode(auth_part.encode('utf-8')).decode('utf-8').rstrip("=")
+    
+    link = f"ss://{encoded_auth_part}"
+    if name:
+        link += f"#{requests.utils.quote(name)}"
+    return link
+
+def format_vmess_link(details):
+    # Vmess link is vmess://<base64_encoded_json>
+    # JSON structure based on what parse_vmess_vless_link extracts and common fields:
+    vmess_obj = {
+        "ps": details.get("name"),
+        "add": details.get("server"),
+        "port": str(details.get("port")), # Port should be string in JSON
+        "id": details.get("uuid"),
+        "aid": str(details.get("alterId", "0")), # AlterId should be string
+        "scy": details.get("cipher", "auto"), # 'cipher' from details maps to 'scy'
+        "net": details.get("network", "tcp"),
+        "type": details.get("headerType", "none"), # 'headerType' from details maps to 'type' in JSON
+        "host": details.get("host", ""),
+        "path": details.get("path", ""),
+        "tls": details.get("tls", ""), # "tls" or ""
+        "sni": details.get("sni", ""),
+        "v": "2" # Protocol version
+    }
+
+    # Clean up optional fields if they are empty or default to make links cleaner
+    keys_to_remove_if_empty_or_default = {
+        "host": "",
+        "path": "",
+        "tls": "",
+        "sni": "",
+        "type": "none" # if 'type' (headerType) is 'none', it can often be omitted
+    }
+
+    final_vmess_obj = {}
+    for key, value in vmess_obj.items():
+        if key in keys_to_remove_if_empty_or_default and value == keys_to_remove_if_empty_or_default[key]:
+            continue
+        if value is not None and value != "": # Keep field if it has a non-empty value
+            final_vmess_obj[key] = value
+        elif key not in keys_to_remove_if_empty_or_default : # Keep essential fields even if empty (though parser should provide them)
+             final_vmess_obj[key] = value
+
+
+    # If tls is not present or empty, sni should also be removed
+    if not final_vmess_obj.get("tls"):
+        final_vmess_obj.pop("sni", None)
+    
+    # Ensure 'v' is always present
+    final_vmess_obj["v"] = "2"
+
+
+    json_string = json.dumps(final_vmess_obj, separators=(',', ':'), sort_keys=True)
+    base64_encoded_json = base64.urlsafe_b64encode(json_string.encode('utf-8')).decode('utf-8').rstrip('=')
+    return f"vmess://{base64_encoded_json}"
+
+def format_vless_link(details):
+    uuid = details.get("uuid")
+    server = details.get("server")
+    port = details.get("port")
+    name = details.get("name", "")
+
+    params = {}
+    # Mapping details from server_details to VLESS query parameters
+    if details.get("cipher"): # VLESS uses "encryption"
+        params["encryption"] = details["cipher"]
+    if details.get("flow"):
+        params["flow"] = details["flow"]
+    if details.get("network"): # VLESS uses "type" for network
+        params["type"] = details["network"]
+    if details.get("security"): # 'tls', 'reality', 'none'
+        params["security"] = details["security"]
+    if details.get("sni"):
+        params["sni"] = details["sni"]
+    if details.get("fingerprint"): # For reality or tls with custom fingerprint
+        params["fp"] = details["fingerprint"]
+    
+    # Reality-specific parameters
+    if details.get("security") == "reality":
+        if details.get("publicKey"):
+            params["pbk"] = details["publicKey"]
+        if details.get("shortId"):
+            params["sid"] = details["shortId"]
+        if details.get("spiderX"): # Parsed as "spiderX"
+            params["spx"] = details["spiderX"]
+
+    if details.get("skip-cert-verify") is True:
+        params["allowInsecure"] = "1"
+    
+    # Network-specific parameters (ws, grpc)
+    network_type = details.get("network")
+    if network_type == "ws":
+        ws_opts = details.get("ws-opts", {})
+        if "path" in ws_opts and ws_opts["path"]:
+            params["path"] = ws_opts["path"]
+        # VLESS uses 'host' query param for Host header in ws
+        if "headers" in ws_opts and "Host" in ws_opts["headers"] and ws_opts["headers"]["Host"]:
+            params["host"] = ws_opts["headers"]["Host"]
+    elif network_type == "grpc":
+        grpc_opts = details.get("grpc-opts", {})
+        if "grpc-service-name" in grpc_opts and grpc_opts["grpc-service-name"]:
+            params["serviceName"] = grpc_opts["grpc-service-name"]
+
+    query_string = urlencode(params)
+    encoded_name = requests.utils.quote(name) if name else ""
+
+    link = f"vless://{uuid}@{server}:{port}"
+    if query_string:
+        link += f"?{query_string}"
+    if encoded_name: # Only add '#' if there's a name
+        link += f"#{encoded_name}"
+    return link
 
 def fetch_server_configs(url):
     print(f"Скачивание и обработка подписки: {url}...")
@@ -723,9 +856,9 @@ def main():
                         try:
                             stdout_data_late, stderr_data_late = process.communicate(timeout=0.5)
                             if stdout_data_late and stdout_data_late.strip():
-                                print(f"  XRAY STDOUT (при остановке {server_name}):\\n{stdout_data_late.strip()}")
+                                print(f"  XRAY STDOUT (при остановке {server_name}):\\\\n{stdout_data_late.strip()}")
                             if stderr_data_late and stderr_data_late.strip():
-                                print(f"  XRAY STDERR (при остановке {server_name}):\\n{stderr_data_late.strip()}")
+                                print(f"  XRAY STDERR (при остановке {server_name}):\\\\n{stderr_data_late.strip()}")
                         except subprocess.TimeoutExpired:
                             print(f"  Не удалось получить stdout/stderr от {server_name} перед terminate (timeout).")
                         except Exception as e_comm:
@@ -759,30 +892,93 @@ def main():
                         os.remove(config_file_path)
                         # print(f"  Временный файл конфигурации {config_file_path} удален.")
                     except Exception as e_rem:
-                        print(f"  Не удалось удалить временный файл {config_file_path}: {e_rem}")
+                        print(f"  Предупреждение: Не удалось удалить временный файл конфигурации {config_file_path}: {e_rem}")
         
         if good_servers_for_this_subscription:
-            output_filename = f"{output_filename_base}_good_servers.yml"
-            try:
-                with open(output_filename, 'w', encoding='utf-8') as f:
-                    yaml.dump({"proxies": good_servers_for_this_subscription}, f, allow_unicode=True, sort_keys=False, indent=2)
+            all_good_servers_overall_count += len(good_servers_for_this_subscription)
+            # Определяем имя файла для сохранения на основе имени исходного файла/URL
+            original_input_extension = os.path.splitext(urlparse(sub_url).path)[1].lower()
+            output_filename_suffix = "_good_servers"
+            
+            # Проверяем, является ли sub_url локальным путем к файлу
+            is_local_file = os.path.exists(sub_url)
+            
+            if is_local_file:
+                # Если это локальный файл, берем его расширение
+                _, original_input_extension = os.path.splitext(sub_url)
+                original_input_extension = original_input_extension.lower()
+                # Используем имя файла без расширения как output_filename_base
+                output_filename_base = os.path.splitext(os.path.basename(sub_url))[0]
+            else:
+                # Для URL используем существующую логику извлечения output_filename_base
+                # и original_input_extension уже определен выше из urlparse
+                pass # output_filename_base уже получен из fetch_server_configs
+            
+            # Формируем имя выходного файла
+            if original_input_extension == ".txt":
+                output_filename = f"{output_filename_base}{output_filename_suffix}.txt"
+                print(f"\nСохранение {len(good_servers_for_this_subscription)} хороших серверов в TXT (Base64) файл: {output_filename}")
+                
+                links_to_encode = []
+                for server in good_servers_for_this_subscription:
+                    link = None
+                    server_type = server.get("type", "").lower()
                     
-                print(f"Сохранено {len(good_servers_for_this_subscription)} хороших серверов в файл \\'{output_filename}\\'")
-                all_good_servers_overall_count += len(good_servers_for_this_subscription)
-            except Exception as e:
-                print(f"Ошибка при сохранении хороших серверов в файл {output_filename}: {e}")
-        else:
-            print(f"Хороших серверов для подписки {sub_url} не найдено.")
+                    if server_type == "trojan":
+                        link = format_trojan_link(server)
+                    elif server_type == "ss" or server_type == "shadowsocks":
+                        link = format_ss_link(server)
+                    elif server_type == "vmess":
+                        link = format_vmess_link(server)
+                    elif server_type == "vless":
+                        link = format_vless_link(server)
+                    
+                    if link:
+                        links_to_encode.append(link)
+                    else:
+                        print(f"  Предупреждение: Не удалось отформатировать ссылку для сервера: {server.get('name', 'N/A')}")
+                        # Fallback to name or some identifier if formatting fails
+                        links_to_encode.append(server.get("name", f"Unnamed_{server.get('type')}_{server.get('server')}"))
 
-    print(f"\n--- Завершено ---")
-    print(f"Всего найдено и сохранено хороших серверов: {all_good_servers_overall_count}")
-    # Удаление временного файла конфигурации, если он остался после аварийного завершения
-    # (хотя теперь он удаляется для каждого сервера индивидуально)
+                if links_to_encode:
+                    full_subscription_content = "\n".join(links_to_encode)
+                    # Use urlsafe_b64encode for broader compatibility, though standard base64 often works.
+                    # V2RayN typically expects standard base64, not necessarily URL-safe for the whole blob.
+                    # Let's stick to standard base64 for the final output as per common subscription formats.
+                    base64_encoded_subscription = base64.b64encode(full_subscription_content.encode('utf-8')).decode('utf-8')
+                    
+                    with open(output_filename, 'w', encoding='utf-8') as f:
+                        f.write(base64_encoded_subscription)
+                    print(f"Сохранено в {output_filename}")
+                else:
+                    print(f"Нет ссылок для кодирования и сохранения в {output_filename}")
+            
+            else: # По умолчанию или если расширение было .yml/.yaml
+                final_extension = original_input_extension if original_input_extension in [".yml", ".yaml"] else ".yml"
+                output_filename = f"{output_filename_base}{output_filename_suffix}{final_extension}"
+                print(f"\nСохранение {len(good_servers_for_this_subscription)} хороших серверов в YAML файл: {output_filename}")
+                proxies_output = {'proxies': good_servers_for_this_subscription}
+                try:
+                    with open(output_filename, 'w', encoding='utf-8') as f:
+                        yaml.dump(proxies_output, f, allow_unicode=True, sort_keys=False, indent=2)
+                    print(f"Сохранено в {output_filename}")
+                except Exception as e:
+                    print(f"Ошибка при сохранении YAML файла {output_filename}: {e}")
+        else:
+            print(f"Для подписки {sub_url} не найдено работающих серверов.")
+
+    print(f"\n\n--- Итог ---")
+    print(f"Всего протестировано подписок: {len(subscription_urls)}")
+    print(f"Общее количество найденных и сохраненных хороших серверов: {all_good_servers_overall_count}")
     if os.path.exists(TEMP_CONFIG_FILENAME):
         try:
             os.remove(TEMP_CONFIG_FILENAME)
-        except Exception:
-            pass # Игнорируем, если не удалось удалить
+            print(f"Финальное удаление временного файла конфигурации {TEMP_CONFIG_FILENAME} успешно.")
+        except Exception as e_remove_final:
+            print(f"Предупреждение: Не удалось удалить временный файл конфигурации {TEMP_CONFIG_FILENAME} в конце: {e_remove_final}")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    start_time = time.time()
     main()
+    end_time = time.time()
+    print(f"Скрипт завершил работу за {end_time - start_time:.2f} секунд.")
