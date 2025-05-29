@@ -2,7 +2,7 @@ name: Parse VLESS Keys Hourly
 
 on:
   schedule:
-    - cron: '0 * * * *' # Запускать каждый час
+    - cron: '0 */4 * * *' # Запускать каждые 4 часа
   workflow_dispatch: # Позволяет запускать вручную
 
 permissions: # Добавляем права на запись контента
