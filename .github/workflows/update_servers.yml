@@ -54,6 +54,7 @@ jobs:
           git diff --staged --quiet 
           if (-not $?) { # Если последняя команда НЕ завершилась успешно (т.е. БЫЛИ изменения)
             git commit -m "Automated update: good server lists"
+            git pull --rebase # Добавляем git pull перед git push
             git push
           } else {
             echo "No changes to commit for good server lists."
