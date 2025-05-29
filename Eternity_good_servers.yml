@@ -95,6 +95,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇯🇵JP-149.22.87.204-0366 | 44.407MB
+  server: 149.22.87.204
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-85.210.120.237-0251 | 41.111MB
   server: 85.210.120.237
   port: 443
@@ -151,12 +157,6 @@ proxies:
   password: f8f7aCzcPKbsF8p3
 - name: 🇬🇧GB-212.102.53.197-0318 | 37.248MB
   server: uk-dc1.yangon.club
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇬🇧GB-212.102.53.81-0337 | 37.057MB
-  server: 212.102.53.81
   port: 443
   type: ss
   cipher: aes-128-gcm
@@ -311,12 +311,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: W74XFALLLuw6m5IA
-- name: TR-185.123.101.241-5243 | 24.585MB
-  server: 185.123.101.241
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
 - name: CH-156.146.62.164-0346 | 23.541MB
   server: 156.146.62.164
   port: 443
