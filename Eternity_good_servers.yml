@@ -35,12 +35,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇨🇦CA-79.127.233.170-0330 | 85.172MB
-  server: 79.127.233.170
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
 - name: 🇺🇸US-212.102.47.130-0289 | 79.992MB
   server: 212.102.47.130
   port: 443
@@ -49,12 +43,6 @@ proxies:
   password: shadowsocks
 - name: 🇺🇸US-212.102.47.129-0458 | 77.088MB
   server: 212.102.47.129
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇨🇦CA-149.22.95.183-0316 | 68.328MB
-  server: 149.22.95.183
   port: 443
   type: ss
   cipher: aes-128-gcm
@@ -317,6 +305,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: W74XFALLLuw6m5IA
+- name: TR-185.123.101.241-5243 | 24.585MB
+  server: 185.123.101.241
+  port: 990
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: f8f7aCzcPKbsF8p3
 - name: CH-156.146.62.164-0346 | 23.541MB
   server: 156.146.62.164
   port: 443
@@ -341,32 +335,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: RELAY-104.21.112.1-0747 | 17.519MB
-  server: 104.21.112.1
-  port: 2087
-  type: vmess
-  uuid: 1c36906e-1a21-4330-b04f-85baf1a6ff26
-  alterId: 0
-  cipher: auto
-  tls: tls
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: rak1d3.777269.xyz
 - name: 🇷🇺RU-45.151.62.54-0375 | 15.907MB
   server: 45.151.62.54
   port: 28825
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0zyDRZ1XmNXaaCAN7KEA8a
-- name: 🇪🇸ES-45.154.206.192-0395 | 15.246MB
-  server: 45.154.206.192
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
 - name: CH-204.136.10.115-0438 | 6.518MB
   server: 204.136.10.115
   port: 1866
