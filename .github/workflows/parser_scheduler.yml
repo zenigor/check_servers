@@ -35,11 +35,12 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin $(git rev-parse --abbrev-ref HEAD) # Update current local branch
           git add ${{ steps.parser.outputs.filename }}
           # Проверяем, есть ли изменения для коммита
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Update ${{ steps.parser.outputs.filename }} with latest keys"
-            git push
+            git push # Push to the current branch
           fi 
