@@ -1,10 +1,4 @@
 proxies:
-- name: 🇺🇸US-173.244.56.6-0228 | 168.484MB
-  server: 173.244.56.6
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇺🇸US-173.244.56.9-0229 | 167.63MB
   server: 173.244.56.9
   port: 443
@@ -103,6 +97,12 @@ proxies:
   password: shadowsocks
 - name: 🇯🇵JP-149.22.87.240-0280 | 28.338MB
   server: 149.22.87.240
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇯🇵JP-149.22.87.241-0291 | 27.854MB
+  server: 149.22.87.241
   port: 443
   type: ss
   cipher: aes-128-gcm
