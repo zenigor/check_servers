@@ -1,0 +1,10 @@
+vless://dc07a924-7d8d-4faf-b7fe-56c97065c034@sin5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇸🇬 Singapore 5
+vless://5cf6fe17-c11b-47b1-9406-88686013c033@lon5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇬🇧 London 5
+vless://a620d57a-9976-4698-ab04-f34b53eaf543@tel5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇮🇱 Tel Aviv 5
+vless://e2177b60-49cb-4a97-976a-ce2869768d1c@fra5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇩🇪 Frankfurt 5
+vless://7691540e-d821-4f6e-9308-2c8c30906693@hon5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇭🇰 Hong Kong 5
+vless://60568f66-c8e3-4f8c-92f2-ecb091d26b7b@ams5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇳🇱 Amsterdam 5
+vless://fbf87764-7532-48d9-95fb-66b3e9322f0c@sin5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇸🇬 Singapore 5
+vless://127d4725-611c-4331-b206-d6ffa0e78aaf@lon5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇬🇧 London 5
+vless://07c01e0b-cfe8-461c-9960-14a935562fd9@tel5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇮🇱 Tel Aviv 5
+vless://143090f3-a2f5-4c04-ba98-021f6fcec4e9@fra5.vpntype.dev:443?security=tls&encryption=none&alpn=h2,http/1.1&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision#VPNTYPE 🇩🇪 Frankfurt 5
