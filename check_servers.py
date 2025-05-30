@@ -9,6 +9,7 @@ import base64
 import re
 from urllib.parse import urlparse, parse_qs, urlencode
 import urllib3 # Добавлено для отключения предупреждений
+import datetime # Для измерения времени скачивания
 
 # Отключаем InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -18,6 +19,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 SUBSCRIPTIONS_FILENAME = "subscriptions.txt"
 PRE_CHECK_URL = "https://www.gstatic.com/generate_204" # URL для предварительной проверки
 TARGET_URL_TO_CHECK = "https://aistudio.google.com"
+DOWNLOAD_TEST_URL = "https://cachefly.cachefly.net/50mb.test" # URL для теста скорости
+DOWNLOAD_TEST_FILE_SIZE_MB = 50 # Размер файла для теста скорости в МБ
 CORE_EXECUTABLE_PATH = "core/xray.exe"
 
 LOCAL_SOCKS_PORT = 10808
@@ -25,6 +28,7 @@ TEMP_CONFIG_FILENAME = "temp_checker_config.json"
 # GOOD_SERVERS_FILENAME = "good_servers.yml" # Будет генерироваться динамически
 PRE_CHECK_TIMEOUT = 7 # Таймаут для предварительной проверки (в секундах)
 REQUEST_TIMEOUT = 15    # Таймаут для основной проверки
+DOWNLOAD_TIMEOUT = 60 # Таймаут для теста скорости загрузки (в секундах)
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 MAX_SERVERS_TO_TEST = 0
 DEBUG_SAVE_CONFIG = True # Флаг для сохранения конфигов, вызвавших ошибку 23
@@ -79,7 +83,7 @@ def parse_ss_link(link):
         # Некоторые ссылки могут быть дважды URL-кодированы перед base64
         try:
             decoded_bytes = base64.urlsafe_b64decode(encoded_part + '=' * (-len(encoded_part) % 4))
-            decoded_str = decoded_bytes.decode('utf-8')
+            decoded_str = decoded_bytes.decode('utf-8').strip()
         except Exception:
             # Если первая попытка не удалась, пробуем URL-декодировать и затем base64
             try:
@@ -571,7 +575,7 @@ def create_v2ray_config(server_details):
         "log": {"loglevel": "warning"},
         "inbounds": [{
             "port": LOCAL_SOCKS_PORT, "listen": "127.0.0.1", "protocol": "socks",
-            "settings": {"auth": "noauth", "udp": True, "ip": "127.0.0.1"}
+            "settings": {"auth": "noauth", "udp": server_details.get("udp", True), "ip": "127.0.0.1"}
         }],
         "outbounds": []
     }
@@ -583,106 +587,172 @@ def create_v2ray_config(server_details):
             "security": "",
         }
     }
+    # Небольшая нормализация для поля tls из YAML, если оно булево
     if server_details.get("tls") == True:
         server_details["tls"] = "tls"
-    server_name_for_log = server_details.get('name', 'N/A')
+    # elif server_details.get("tls") == False: # Если есть tls: false, убираем его
+    #     server_details.pop("tls", None)
+
+
+    server_name_for_log = server_details.get('name', 'N/A') # Для логов
     protocol = outbound_config["protocol"]
 
     if protocol == "vmess":
         outbound_config["settings"]["vnext"] = [{
             "address": server_details.get("server"),
             "port": int(server_details.get("port")),
-            "users": [{"id": server_details.get("uuid"), "alterId": int(server_details.get("alterId", server_details.get("alterid", 0))), "security": server_details.get("cipher", "auto"), "level": 0}]
+            "users": [{
+                "id": server_details.get("uuid"), 
+                "alterId": int(server_details.get("alterId", server_details.get("alterid", 0))), # alterid из clash yaml
+                "security": server_details.get("cipher", "auto"), 
+                "level": 0
+            }]
         }]
     elif protocol == "vless":
         outbound_config["settings"]["vnext"] = [{
             "address": server_details.get("server"),
             "port": int(server_details.get("port")),
-            "users": [{"id": server_details.get("uuid"), "encryption": server_details.get("cipher", "none"), "flow": server_details.get("flow", ""), "level": 0}]
+            "users": [{
+                "id": server_details.get("uuid"), 
+                "encryption": server_details.get("cipher", "none"), # vless использует 'encryption'
+                "flow": server_details.get("flow", ""), 
+                "level": 0 
+            }]
         }]
+        # Обработка REALITY (важно: reality и tls взаимоисключающие в streamSettings)
+        # reality: true из YAML или reality-opts из YAML
         reality_opts_yaml = server_details.get("reality-opts", {})
-        if server_details.get("reality") == "true" or server_details.get("reality") == True or reality_opts_yaml:
+        if server_details.get("reality") == "true" or server_details.get("reality") == True or reality_opts_yaml: # reality: true/True или есть reality-opts
             outbound_config["streamSettings"]["security"] = "reality"
             outbound_config["streamSettings"]["realitySettings"] = {
-                "serverName": server_details.get("servername", server_details.get("sni", "")),
-                "fingerprint": server_details.get("fingerprint", reality_opts_yaml.get("fingerprint", "chrome")),
-                "publicKey": reality_opts_yaml.get("public-key", server_details.get("publicKey", "")),
-                "shortId": reality_opts_yaml.get("short-id", server_details.get("shortId", "")),
-                "spiderX": reality_opts_yaml.get("spider-x", server_details.get("spiderX", "")),
+                "serverName": server_details.get("servername", server_details.get("sni", "")), # servername из clash, sni из vless link
+                "fingerprint": server_details.get("fingerprint", reality_opts_yaml.get("fingerprint", "chrome")), # fingerprint из clash или vless link, default chrome
+                "publicKey": reality_opts_yaml.get("public-key", server_details.get("publicKey", "")), # public-key из clash, publicKey из vless link
+                "shortId": reality_opts_yaml.get("short-id", server_details.get("shortId", "")), # short-id из clash, shortId из vless link
+                "spiderX": reality_opts_yaml.get("spider-x", server_details.get("spiderX", "")) # spider-x из clash, spiderX из vless link
             }
-            server_details["tls"] = None
+            server_details["tls"] = None # Убеждаемся, что tls не будет настроен параллельно
             print(f"  Конфигурируется REALITY для {server_name_for_log}")
+
     elif protocol == "trojan":
          outbound_config["settings"]["servers"] = [{
             "address": server_details.get("server"), "port": int(server_details.get("port")),
             "password": server_details.get("password"), "level": 0
         }]
     elif protocol == "ss" or protocol == "shadowsocks":
-        outbound_config["protocol"] = "shadowsocks"
+        outbound_config["protocol"] = "shadowsocks" # Xray ожидает "shadowsocks"
         ss_settings = {
             "address": server_details.get("server"), "port": int(server_details.get("port")),
             "method": server_details.get("cipher"), "password": server_details.get("password"),
         }
+        # Обработка плагинов для Shadowsocks (например, obfs или v2ray-plugin)
         plugin = server_details.get("plugin")
         plugin_opts = server_details.get("plugin-opts", {})
-        if plugin == "obfs":
-            ss_settings["obfs"] = plugin_opts.get("mode")
-            ss_settings["obfsparam"] = plugin_opts.get("host")
+
+        if plugin == "obfs": # Старый obfs-local
+            # Xray напрямую не поддерживает "obfs" как plugin, это было для ss-libev.
+            # Для Xray это обычно реализуется через streamSettings + ws/http (если obfs=http/tls)
+            # Это очень упрощенная попытка, может не работать для всех obfs типов
+            if plugin_opts.get("mode") == "http" or plugin_opts.get("mode") == "tls":
+                outbound_config["streamSettings"]["network"] = "tcp" # obfs обычно TCP, но оборачивается
+                # Xray не имеет прямого `obfs` и `obfsparam` в shadowsocks settings.
+                # Вместо этого, если obfs это http/tls, то это часть streamSettings. 
+                # Этот блок может потребовать пересмотра для корректной работы с Xray и obfs.
+                # print(f"  Предупреждение: Прямая конфигурация obfs для Shadowsocks в Xray ограничена. Попытка настроить для {server_name_for_log}")
+                # Если obfs-mode=tls, то нужно streamSettings.security=tls и tlsSettings
+                if plugin_opts.get("mode") == "tls":
+                    server_details["tls"] = "tls" # Устанавливаем для общей обработки TLS ниже
+                    if "host" in plugin_opts:
+                        server_details["servername"] = plugin_opts["host"] # Используем host из obfs-opts как SNI
+            # ss_settings["plugin"] = "obfs" # Xray не поймет это поле тут
+            # ss_settings["plugin_opts"] = f"obfs={plugin_opts.get('mode')};obfs-host={plugin_opts.get('host','')}" 
+
         elif plugin == "v2ray-plugin" and plugin_opts.get("mode") == "websocket":
+            # Это более современный способ для SS over WS
             outbound_config["streamSettings"]["network"] = "ws"
             outbound_config["streamSettings"]["wsSettings"] = {
                 "path": plugin_opts.get("path", "/"),
                 "headers": {"Host": plugin_opts.get("host", server_details.get("server"))}
             }
-            if plugin_opts.get("tls") == True:
-                 server_details["tls"] = "tls"
+            if plugin_opts.get("tls") == True: # Если v2ray-plugin использует TLS
+                 server_details["tls"] = "tls" # Устанавливаем для общей обработки TLS ниже
                  if "servername" not in server_details and plugin_opts.get("host"):
-                     server_details["servername"] = plugin_opts.get("host")
+                     server_details["servername"] = plugin_opts["host"] # SNI из host v2ray-plugin
         outbound_config["settings"]["servers"] = [ss_settings]
     else:
         print(f"  Предупреждение: Протокол '{protocol}' для сервера '{server_name_for_log}' не полностью поддерживается этим скриптом. Попытка базовой конфигурации.")
-        return None
+        # Если протокол неизвестен, возвращаем None, чтобы пропустить сервер
+        return None 
 
+    # Общая настройка streamSettings (network, security: tls/xtls, etc.)
+    # network уже установлен (tcp по умолчанию, или ws/grpc из деталей сервера, или из ss plugin)
     network_type = outbound_config["streamSettings"]["network"]
+
+    # WS settings (если network="ws", но wsSettings еще не созданы плагином SS)
     if network_type == "ws" and not outbound_config["streamSettings"].get("wsSettings"):
         ws_opts = server_details.get("ws-opts", {})
-        path = ws_opts.get("path", server_details.get("ws-path", "/"))
+        path = ws_opts.get("path", server_details.get("path", "/")) # path из vmess/vless, или ws-path из YAML
         headers = ws_opts.get("headers", {})
-        if not headers.get("Host") and server_details.get("ws-host"):
-            headers["Host"] = server_details.get("ws-host")
-        if not headers.get("Host") and server_details.get("host"):
+        if not headers.get("Host") and server_details.get("host"): # host из vmess/vless
             headers["Host"] = server_details.get("host")
+        # if not headers.get("Host") and server_details.get("ws-host"): # ws-host из YAML (уже не нужен, если есть host)
+        #     headers["Host"] = server_details.get("ws-host")
         outbound_config["streamSettings"]["wsSettings"] = {"path": path}
-        if headers:
+        if headers: # Только если есть какие-то заголовки
             outbound_config["streamSettings"]["wsSettings"]["headers"] = headers
     elif network_type == "grpc" and not outbound_config["streamSettings"].get("grpcSettings"):
         grpc_opts = server_details.get("grpc-opts", {})
-        service_name = grpc_opts.get("grpc-service-name", server_details.get("serviceName", ""))
-        if service_name:
+        service_name = grpc_opts.get("serviceName", server_details.get("serviceName", "")) # serviceName из vless, grpc-service-name из YAML
+        if service_name: # grpcSettings нужны только если есть serviceName
             outbound_config["streamSettings"]["grpcSettings"] = {"serviceName": service_name}
 
-    yaml_tls_type = server_details.get("tls")
+    # TLS/XTLS settings (если security не 'reality')
+    # server_details["tls"] может быть "tls", "xtls" или None/отсутствовать
+    yaml_tls_type = server_details.get("tls") # Может быть уже установлено выше (e.g. ss+obfs/v2ray-plugin)
+
     if outbound_config["streamSettings"]["security"] != "reality" and yaml_tls_type in ["tls", "xtls"]:
         outbound_config["streamSettings"]["security"] = yaml_tls_type
+        
+        # Определение SNI (servername)
+        # Приоритет: servername (из YAML/Clash), sni (из VLESS link), host (из VMess/ws-opts), server (адрес сервера)
         sni_val = server_details.get("servername", server_details.get("sni"))
         if not sni_val:
+            # Если WS, и есть Host заголовок, используем его для SNI
             if network_type == "ws":
                 ws_host_header = outbound_config["streamSettings"].get("wsSettings", {}).get("headers", {}).get("Host")
                 if ws_host_header: sni_val = ws_host_header
+            # Если VMess и есть 'host', используем его
+            elif protocol == "vmess" and server_details.get("host"):
+                sni_val = server_details.get("host")
+        # Фоллбэк на адрес сервера, если SNI так и не определен
         if not sni_val: sni_val = server_details.get("server")
+
         common_tls_xtls_settings = {
             "serverName": sni_val,
             "allowInsecure": server_details.get("skip-cert-verify", False) or server_details.get("allowInsecure", False),
         }
+        # Добавляем fingerprint, если он есть (для TLS/XTLS)
         if "fingerprint" in server_details and server_details["fingerprint"]:
             common_tls_xtls_settings["fingerprint"] = server_details["fingerprint"]
+
         if yaml_tls_type == "tls":
             outbound_config["streamSettings"]["tlsSettings"] = common_tls_xtls_settings
-        elif yaml_tls_type == "xtls":
+        elif yaml_tls_type == "xtls": # Для XTLS flow также нужен
             outbound_config["streamSettings"]["xtlsSettings"] = common_tls_xtls_settings
+            # XTLS обычно используется с VLESS, flow для VLESS настраивается в vnext users.
+
+    # Если security не установлено (не tls, не xtls, не reality), то оно остается "" (none)
+    # Если network tcp и security "", то streamSettings можно было бы и убрать, но xray их примет.
+    # Однако, если network не tcp (ws, grpc), то streamSettings нужны даже без security.
+    if not outbound_config["streamSettings"]["security"] and network_type == "tcp":
+        # Можно очистить streamSettings, если это просто TCP без TLS/REALITY
+        # outbound_config.pop("streamSettings", None) - Но это не обязательно
+        pass 
 
     config["outbounds"].append(outbound_config)
+    # Добавляем прямой выход для предотвращения ошибок, если прокси не работает
     config["outbounds"].append({"protocol": "freedom", "tag": "direct", "settings": {}})
+
     try:
         with open(TEMP_CONFIG_FILENAME, 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=2)
@@ -691,338 +761,376 @@ def create_v2ray_config(server_details):
         print(f"  Ошибка записи временного файла конфигурации {TEMP_CONFIG_FILENAME}: {e}")
         return None
 
-def test_server_connection(server_name):
-    proxies = {
-        "http": f"socks5h://127.0.0.1:{LOCAL_SOCKS_PORT}",
-        "https": f"socks5h://127.0.0.1:{LOCAL_SOCKS_PORT}",
-    }
-    headers = {"User-Agent": USER_AGENT}
-
-    # --- Начало: Предварительная проверка ---
-    # print(f"  Предварительная проверка: {server_name} -> {PRE_CHECK_URL}")
+def test_download_speed(server_name, proxy_address, proxy_port, download_url, file_size_mb, timeout):
+    """Тестирует скорость загрузки через указанный прокси."""
+    print(f"  Тестирование скорости загрузки для {server_name}...")
+    start_time = time.time()
+    process = None
     try:
-        # Используем stream=True, чтобы не загружать тело ответа, если оно вдруг будет
-        # Для generate_204 тело не ожидается, но это хорошая практика
-        response_pre = requests.get(PRE_CHECK_URL, proxies=proxies, timeout=PRE_CHECK_TIMEOUT, headers=headers, verify=False, stream=True)
-        
-        if response_pre.status_code == 204:
-            print(f"  Предварительная проверка УСПЕХ: Сервер '{server_name}' достиг {PRE_CHECK_URL}.")
-        else:
-            # print(f"  Предварительная проверка ОШИБКА: Сервер '{server_name}' к {PRE_CHECK_URL} вернул статус {response_pre.status_code} (ожидался 204).")
-            return False # Если предварительная проверка не прошла, дальше не идем
-        # Закрываем соединение, так как использовали stream=True
-        response_pre.close()
+        output_to = "NUL" if os.name == 'nt' else "/dev/null"
+        cmd = [
+            "curl",
+            "-x", f"socks5h://{proxy_address}:{proxy_port}",
+            "-o", output_to,
+            "-s", # Тихий режим
+            "-L", # Следовать редиректам
+            "--connect-timeout", str(PRE_CHECK_TIMEOUT), # Таймаут на соединение
+            "--max-time", str(timeout), # Общий таймаут на операцию
+            "--fail", # Завершиться с ошибкой при HTTP ошибках
+            download_url
+        ]
 
-    except requests.exceptions.Timeout:
-        # print(f"  Предварительная проверка ОШИБКА (Таймаут): Сервер '{server_name}' не ответил на {PRE_CHECK_URL} за {PRE_CHECK_TIMEOUT} сек.")
-        return False
-    except requests.exceptions.ProxyError as e:
-        # print(f"  Предварительная проверка ОШИБКА (Прокси): Сервер '{server_name}' к {PRE_CHECK_URL}. {e}")
-        return False
-    except requests.exceptions.RequestException as e:
-        # print(f"  Предварительная проверка ОШИБКА (Соединение): Сервер '{server_name}' к {PRE_CHECK_URL}. {e}")
-        return False
-    # --- Конец: Предварительная проверка ---
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate(timeout=timeout + 5) 
 
-    # --- Начало: Основная проверка (если предварительная пройдена) ---
-    print(f"  Основная проверка: {server_name} -> {TARGET_URL_TO_CHECK} через SOCKS5://127.0.0.1:{LOCAL_SOCKS_PORT}")
-    try:
-        response = requests.get(TARGET_URL_TO_CHECK, proxies=proxies, timeout=REQUEST_TIMEOUT, headers=headers, verify=False)
-        
-        print(f"  Основная проверка: Сервер '{server_name}': Статус {response.status_code}, URL: {response.url}")
-        if response.status_code == 200:
-            if "aistudio.google.com" in response.url.lower() or \
-               ("google ai studio" in response.text.lower() or "gemini" in response.text.lower()):
-                 print(f"  Основная проверка УСПЕХ: Сервер '{server_name}' работает и вернул страницу Google AI Studio.")
-                 return True
+        if process.returncode == 0:
+            end_time = time.time()
+            duration = end_time - start_time
+            if duration > 0.1: # Избегаем деления на ноль или слишком малое время
+                speed_MBps = (file_size_mb / duration)
+                print(f"  Скорость загрузки для {server_name}: {speed_MBps:.2f} MB/s (файл {file_size_mb}MB за {duration:.2f} сек)")
+                return speed_MBps
             else:
-                 print(f"  Основная проверка ПРЕДУПРЕЖДЕНИЕ: Сервер '{server_name}' вернул 200, но контент не похож на AI Studio. Возможно, редирект или капча.")
-                 return False
-        elif response.status_code == 403:
-            print(f"  Основная проверка ОШИБКА (403): Сервер '{server_name}' заблокирован для {TARGET_URL_TO_CHECK}.")
-            return False
+                print(f"  Тест скорости для {server_name} завершился слишком быстро ({duration:.3f} сек), невозможно точно рассчитать скорость.")
+                return 0.0 # Считаем неудачей, если слишком быстро
         else:
-            print(f"  Основная проверка ОШИБКА (код {response.status_code}): Сервер '{server_name}' вернул неожиданный статус.")
-            return False
-    except requests.exceptions.Timeout:
-        print(f"  Основная проверка ОШИБКА (Таймаут): Сервер '{server_name}' не ответил за {REQUEST_TIMEOUT} сек.")
-        return False
-    except requests.exceptions.ProxyError as e:
-        print(f"  Основная проверка ОШИБКА (Прокси): Сервер '{server_name}': Не удалось подключиться через прокси. {e}")
-        return False
-    except requests.exceptions.RequestException as e:
-        print(f"  Основная проверка ОШИБКА (Соединение): Сервер '{server_name}': {e}")
-        return False
-    # --- Конец: Основная проверка ---
+            if "Could not resolve host" in stderr.decode(errors='ignore'):
+                print(f"  Ошибка теста скорости для {server_name}: Не удалось разрешить хост через прокси (DNS).")
+            else:
+                print(f"  Ошибка теста скорости для {server_name} (код: {process.returncode}). stderr: {stderr.decode(errors='ignore')[:200]}...")
+            return 0.0
+
+    except subprocess.TimeoutExpired:
+        print(f"  Тест скорости для {server_name} превысил таймаут ({timeout} сек).")
+        if process:
+            try:
+                process.kill()
+                process.wait()
+            except Exception as e_kill:
+                print(f"  Ошибка при попытке убить процесс curl для {server_name}: {e_kill}")
+        return 0.0
+    except FileNotFoundError:
+        print(f"  Команда 'curl' не найдена. Пожалуйста, установите curl и убедитесь, что он в PATH.")
+        global curl_not_found_reported
+        if not curl_not_found_reported:
+            curl_not_found_reported = True
+            print("  Тесты скорости будут пропущены из-за отсутствия curl.")
+        return -1 # Специальное значение, чтобы обозначить проблему с curl (сервер будет отброшен)
+    except Exception as e:
+        print(f"  Неожиданная ошибка во время теста скорости для {server_name}: {e}")
+        return 0.0
+
+# Глобальный флаг, чтобы сообщить об отсутствии curl только один раз
+curl_not_found_reported = False
+
+def test_server_connection(server_name):
+    """Тестирует соединение с сервером через Xray. Возвращает (latency_ms, download_speed_mbps) или (None, 0.0)."""
+    global curl_not_found_reported
+    config_filename = TEMP_CONFIG_FILENAME # Используем глобальное имя файла конфига
+    process = None
+    try:
+        # CORE_EXECUTABLE_PATH должен указывать на xray.exe или аналогичный
+        # Команда для Xray: xray -c config.json (или xray run -c config.json)
+        # Используем просто `xray -c config.json` как более общий вариант для Xray.
+        cmd = [CORE_EXECUTABLE_PATH, "-c", config_filename]
+        
+        # Подавляем консольное окно для xray.exe на Windows
+        startupinfo = None
+        if os.name == 'nt':
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = subprocess.SW_HIDE
+
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, startupinfo=startupinfo)
+        time.sleep(2) # Даем время ядру Xray запуститься и стабилизироваться
+
+        proxies = {
+            "http": f"socks5h://127.0.0.1:{LOCAL_SOCKS_PORT}",
+            "https": f"socks5h://127.0.0.1:{LOCAL_SOCKS_PORT}"
+        }
+        headers = {"User-Agent": USER_AGENT}
+
+        # 1. Предварительная проверка (generate_204)
+        try:
+            response_pre = requests.get(PRE_CHECK_URL, proxies=proxies, timeout=PRE_CHECK_TIMEOUT, headers=headers, verify=False)
+            if response_pre.status_code == 204:
+                pass # Успех, продолжаем
+            else:
+                print(f"  Предварительная проверка для {server_name} не удалась (status {response_pre.status_code}). Пропуск.")
+                return None, 0.0
+        except requests.exceptions.RequestException as e_pre:
+            print(f"  Ошибка предв. проверки для {server_name} ({type(e_pre).__name__}). Пропуск.")
+            return None, 0.0
+
+        # 2. Основная проверка (TARGET_URL_TO_CHECK)
+        test_url = TARGET_URL_TO_CHECK
+        start_time = time.time()
+        response = requests.get(test_url, proxies=proxies, timeout=REQUEST_TIMEOUT, headers=headers, verify=False)
+        end_time = time.time()
+        latency = round((end_time - start_time) * 1000)
+
+        if response.status_code == 200:
+            print(f"  Сервер {server_name} РАБОТАЕТ (основная проверка). Задержка: {latency}ms.")
+            
+            # 3. Проверка скорости загрузки
+            download_speed_mbps = 0.0
+            if curl_not_found_reported and not os.path.exists("curl.exe"): # Если curl глобально не найден и нет локального
+                print(f"  Пропуск теста скорости для {server_name} (curl не найден). Сервер будет считаться нерабочим.")
+                # download_speed_mbps остается 0.0, что приведет к отбраковке ниже
+            else:
+                download_speed_mbps = test_download_speed(
+                    server_name,
+                    "127.0.0.1", LOCAL_SOCKS_PORT,
+                    DOWNLOAD_TEST_URL,
+                    DOWNLOAD_TEST_FILE_SIZE_MB,
+                    DOWNLOAD_TIMEOUT
+                )
+                if download_speed_mbps == -1: # curl не найден во время вызова test_download_speed
+                    curl_not_found_reported = True # Устанавливаем глобальный флаг
+                    print(f"  Тест скорости для {server_name} не выполнен (curl не найден). Сервер будет считаться нерабочим.")
+                    download_speed_mbps = 0.0 # Устанавливаем в 0 для отбраковки
+
+            # Если скорость 0.0 (неудача теста или curl не найден), сервер считается нерабочим
+            if download_speed_mbps > 0:
+                print(f"  Сервер {server_name} успешно прошел все проверки. Скорость: {download_speed_mbps:.2f} MB/s.")
+                return latency, download_speed_mbps
+            else:
+                print(f"  Сервер {server_name} не прошел тест скорости (скорость {download_speed_mbps:.2f} MB/s). Считается нерабочим.")
+                return None, 0.0
+        else:
+            print(f"  Сервер {server_name} НЕ РАБОТАЕТ (основная проверка). Статус: {response.status_code}. Задержка: {latency}ms.")
+            return None, 0.0
+    
+    except Exception as e:
+        print(f"  Критическая ошибка во время тестирования {server_name}: {e}")
+        # В случае любой другой ошибки во время теста соединения, считаем сервер нерабочим
+        return None, 0.0
+    finally:
+        if process:
+            try:
+                process.terminate() # Сначала пытаемся мягко завершить
+                process.wait(timeout=5) # Даем время на завершение
+                # print(f"  Процесс Xray для {server_name} остановлен (terminate, код: {process.returncode}).")
+            except subprocess.TimeoutExpired:
+                print(f"  Процесс Xray для {server_name} не завершился (terminate), принудительная остановка (kill)...")
+                process.kill()
+                try:
+                    process.wait(timeout=5)
+                    # print(f"  Процесс Xray для {server_name} остановлен (kill, код: {process.returncode}).")
+                except Exception as e_kill_wait:
+                    print(f"  Ошибка при ожидании завершения процесса Xray (kill) для {server_name}: {e_kill_wait}")
+            except Exception as e_term_wait: # Если ошибка при wait после terminate
+                print(f"  Ошибка при ожидании завершения процесса Xray (terminate) для {server_name}: {e_term_wait}")
+            # Удаление временного файла конфигурации теперь происходит в main цикле
 
 def main():
+    """Основная функция скрипта."""
+    start_total_time = time.time()
+    print(f"Запуск скрипта проверки серверов в {time.strftime('%Y-%m-%d %H:%M:%S')}")
+
     if not check_core_executable():
         return
 
+    # Загрузка списка подписок
     if not os.path.exists(SUBSCRIPTIONS_FILENAME):
-        print(f"Файл с подписками '{SUBSCRIPTIONS_FILENAME}' не найден. Пожалуйста, создайте его и добавьте URL-адреса подписок.")
-        # Создадим пустой файл для примера
-        with open(SUBSCRIPTIONS_FILENAME, 'w') as f:
-            f.write("# Пример:\\n")
-            f.write("# https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/Eternity.yml\\n")
-            f.write("# https://example.com/another_subscription.txt | ВашеРегулярноеВыражениеДляИменСерверов\\n") # Обновлен пример
-        print(f"Создан пустой файл '{SUBSCRIPTIONS_FILENAME}'. Заполните его и перезапустите скрипт.")
-        return
-
-    subscriptions_data = []  # Новый код
-    with open(SUBSCRIPTIONS_FILENAME, 'r', encoding='utf-8') as f: # Новый код, добавлен encoding
-        for line in f: # Новый код
-            line = line.strip() # Новый код
-            if not line or line.startswith("#"): # Новый код
-                continue # Новый код
-            parts = line.split('|', 1) # Новый код
-            url = parts[0].strip() # Новый код
-            regex_pattern_str = parts[1].strip() if len(parts) > 1 else None # Новый код
-            subscriptions_data.append({"url": url, "regex": regex_pattern_str}) # Новый код
-
-
-    if not subscriptions_data: # Новый код
-        print(f"Файл с подписками '{SUBSCRIPTIONS_FILENAME}' пуст или содержит только комментарии.")
-        return
-
-    all_good_servers_overall_count = 0
-
-    for sub_data in subscriptions_data: # Новый код
-        sub_url = sub_data["url"] # Новый код
-        custom_regex = sub_data["regex"] # Новый код
-
-        print(f"\n--- Обработка подписки: {sub_url} ---")
-        if custom_regex: # Новый код
-            print(f"  Будет применено регулярное выражение для фильтрации имен: {custom_regex}") # Новый код
+        print(f"Файл подписок '{SUBSCRIPTIONS_FILENAME}' не найден.")
+        all_servers_from_all_subs = [] # Инициализируем пустым списком, если файла нет
+    else:
+        with open(SUBSCRIPTIONS_FILENAME, 'r', encoding='utf-8') as f:
+            subscription_lines = [line.strip() for line in f if line.strip() and not line.startswith('#')]
         
-        server_configs, output_filename_base = fetch_server_configs(sub_url, custom_regex) # Новый код
+        all_servers_from_all_subs = []
+        for idx, sub_line in enumerate(subscription_lines):
+            parts = sub_line.split('|', 1)
+            sub_url_or_path = parts[0].strip()
+            custom_regex_for_sub = parts[1].strip() if len(parts) > 1 else None
+            
+            print(f"\nЗагрузка и парсинг источника {idx+1}/{len(subscription_lines)}: {sub_url_or_path}")
+            if custom_regex_for_sub:
+                print(f"  Применяется РВ для фильтрации имен: {custom_regex_for_sub}")
 
-        if not server_configs:
-            print(f"Не удалось получить или обработать конфигурации серверов для {sub_url}. Пропуск.")
+            # Определение имени файла для сохранения оригинальной подписки и для хороших серверов
+            safe_filename_base = "unknown_source"
+            if os.path.exists(sub_url_or_path): # Это локальный файл
+                print(f"  Обработка локального файла: {sub_url_or_path}")
+                safe_filename_base = os.path.splitext(os.path.basename(sub_url_or_path))[0]
+                # Чтение содержимого локального файла
+                try:
+                    with open(sub_url_or_path, 'r', encoding='utf-8') as local_f:
+                        content = local_f.read()
+                    # Попытка декодировать из Base64, если это одна строка без переносов
+                    if not any(c in content for c in '\n\r') and len(content) > 50:
+                        try:
+                            padding = '=' * (-len(content) % 4)
+                            decoded_b64_content = base64.b64decode(content + padding).decode('utf-8')
+                            if any(proto_sig in decoded_b64_content for proto_sig in ['vmess://', 'vless://', 'ss://', 'trojan://']):
+                                print(f"  Локальный файл {sub_url_or_path} распознан как Base64-кодированный список.")
+                                content = decoded_b64_content
+                        except Exception:
+                            pass # Не Base64 или ошибка декодирования, используем как есть
+                    servers_from_sub = parse_subscription_content(content, sub_url_or_path, f"{safe_filename_base}_original_servers.txt", custom_regex_for_sub)
+                except IOError as e_io:
+                    print(f"  Ошибка чтения локального файла {sub_url_or_path}: {e_io}")
+                    servers_from_sub = []
+            else: # Это URL
+                parsed_sub_url = urlparse(sub_url_or_path)
+                url_path_parts = parsed_sub_url.path.split('/')
+                raw_filename_part = "url_subscription"
+                if url_path_parts:
+                    potential_name = url_path_parts[-1]
+                    if potential_name: raw_filename_part = os.path.splitext(potential_name)[0]
+                    elif len(url_path_parts) > 1 and url_path_parts[-2]: raw_filename_part = os.path.splitext(url_path_parts[-2])[0]
+                safe_filename_base = re.sub(r'[^a-zA-Z0-9_\-]', '_', raw_filename_part)[:50]
+                servers_from_sub, _ = fetch_server_configs(sub_url_or_path, custom_regex_pattern=custom_regex_for_sub) # fetch_server_configs теперь возвращает servers, base_name
+                # fetch_server_configs должна также сохранять _original_servers.txt, если необходимо
+
+            if servers_from_sub:
+                # Добавляем информацию об источнике (filename_base) к каждому серверу
+                for server in servers_from_sub:
+                    server['source_info'] = {'filename_base': safe_filename_base, 'original_url': sub_url_or_path}
+                all_servers_from_all_subs.extend(servers_from_sub)
+                print(f"  Добавлено {len(servers_from_sub)} серверов из {sub_url_or_path}.")
+            else:
+                print(f"  Не найдено или не удалось обработать серверы в {sub_url_or_path}.")
+    
+    # Удаление дубликатов серверов
+    print(f"\nВсего загружено {len(all_servers_from_all_subs)} серверов (с возможными дубликатами). Уникализация...")
+    unique_servers_map = {}
+    for server in all_servers_from_all_subs:
+        key_parts = [server['type'], server['server'], str(server['port'])]
+        if server['type'] == 'trojan': key_parts.append(server.get('password',''))
+        elif server['type'] == 'ss': key_parts.extend([server.get('password',''), server.get('cipher','')])
+        elif server['type'] in ['vmess', 'vless']: key_parts.append(server.get('uuid',''))
+        if server.get('network') == 'ws':
+            key_parts.append(server.get('ws-opts',{}).get('path','/') or server.get('path','/'))
+            key_parts.append(server.get('ws-opts',{}).get('headers',{}).get('Host','') or server.get('host',''))
+        if server.get('tls') == 'tls' or server.get('security') in ['tls', 'reality']:
+            key_parts.append(server.get('sni', server.get('servername', server.get('host',''))))
+        unique_key = tuple(key_parts)
+        if unique_key not in unique_servers_map:
+            unique_servers_map[unique_key] = server
+    
+    unique_servers_to_test = list(unique_servers_map.values())
+    print(f"Уникальных серверов для тестирования: {len(unique_servers_to_test)}")
+
+    if MAX_SERVERS_TO_TEST > 0 and len(unique_servers_to_test) > MAX_SERVERS_TO_TEST:
+        print(f"\nОграничение MAX_SERVERS_TO_TEST: {MAX_SERVERS_TO_TEST}. Случайным образом выбираем серверы...")
+        selected_servers = random.sample(unique_servers_to_test, MAX_SERVERS_TO_TEST) # Нужен import random
+        print(f"Выбрано {len(selected_servers)} серверов для тестирования.")
+    else:
+        selected_servers = unique_servers_to_test
+    
+    good_servers_by_source_identifier = {} 
+
+    print(f"\nНачинается тестирование {len(selected_servers)} серверов... ({PRE_CHECK_TIMEOUT}s предпроверка, {REQUEST_TIMEOUT}s основная, {DOWNLOAD_TIMEOUT}s тест скорости)")
+    tested_server_count = 0
+    for server_details in selected_servers:
+        tested_server_count += 1
+        server_name_original = server_details.get('name', 'N/A')
+        print(f"\n({tested_server_count}/{len(selected_servers)}) Тестирование: {server_name_original}")
+        
+        config_temp_file = create_v2ray_config(server_details)
+        if not config_temp_file:
+            print(f"  Не удалось создать конфиг для {server_name_original}. Пропуск.")
             continue
-
-        good_servers_for_this_subscription = []
         
-        servers_to_test_list = server_configs
-        if MAX_SERVERS_TO_TEST > 0 and len(server_configs) > MAX_SERVERS_TO_TEST:
-            print(f"  Ограничение на {MAX_SERVERS_TO_TEST} серверов из {len(server_configs)}.")
-            servers_to_test_list = server_configs[:MAX_SERVERS_TO_TEST]
-
-        for i, server_details in enumerate(servers_to_test_list):
-            server_name = server_details.get('name', f'Server_{i+1}')
-            print(f"\nТестирование сервера {i+1}/{len(servers_to_test_list)}: {server_name} (из {sub_url})")
-
-            protocol = server_details.get("type", "").lower()
-            required_fields = []
-            if protocol == "vmess" or protocol == "vless":
-                required_fields = ["server", "port", "uuid"]
-            elif protocol == "trojan":
-                required_fields = ["server", "port", "password"]
-            elif protocol == "ss" or protocol == "shadowsocks":
-                required_fields = ["server", "port", "cipher", "password"]
-
-            missing_fields = [field for field in required_fields if not server_details.get(field)]
-            if missing_fields:
-                print(f"  Пропуск сервера {server_name}: отсутствуют обязательные поля: {', '.join(missing_fields)}")
-                continue
-            
-            port = server_details.get("port")
-            if port:
-                try:
-                    int(port)
-                except ValueError:
-                    print(f"  Пропуск сервера {server_name}: некорректный порт '{port}'.")
-                    continue
-            else:
-                 print(f"  Пропуск сервера {server_name}: порт не указан.")
-                 continue
-
-            config_file_path = None # Для finally
-            process = None      # Для finally
-
-            try:
-                config_file_path = create_v2ray_config(server_details)
-                if not config_file_path:
-                    print(f"  Не удалось создать конфигурационный файл для {server_name}. Пропуск.")
-                    continue
-
-                command = [CORE_EXECUTABLE_PATH, "run", "-c", config_file_path]
-                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8')
-                
-                print(f"  Ядро Xray/V2Ray запущено для {server_name} (PID: {process.pid}). Ожидание ~0.5 сек для проверки стабильности...")
-                time.sleep(0.5)
-
-                stdout_data_early = None
-                stderr_data_early = None
-
-                if process.poll() is not None: # Процесс завершился сразу
-                    # Собираем вывод один раз
-                    stdout_data_early, stderr_data_early = process.communicate()
-                    print(f"  КРИТИЧЕСКАЯ ОШИБКА: Ядро Xray/V2Ray для {server_name} завершилось сразу после запуска с кодом {process.returncode}.")
-                    if stdout_data_early and stdout_data_early.strip():
-                        print(f"  XRAY STDOUT ({server_name}):\\n{stdout_data_early.strip()}")
-                    if stderr_data_early and stderr_data_early.strip():
-                        print(f"  XRAY STDERR ({server_name}):\\n{stderr_data_early.strip()}")
-                    
-                    if process.returncode == 23 and DEBUG_SAVE_CONFIG:
-                        saved_config_filename = f"debug_config_{server_name.replace(' ', '_').replace(':', '_')}.json"
-                        if os.path.exists(config_file_path): # Используем config_file_path
-                            try:
-                                shutil.copyfile(config_file_path, saved_config_filename)
-                                print(f"  КОНФИГ С ОШИБКОЙ 23 сохранен как: {saved_config_filename}")
-                                print(f"  Детали сервера, вызвавшего ошибку: {json.dumps(server_details, indent=2, ensure_ascii=False)}")
-                            except Exception as e_copy:
-                                print(f"  Не удалось скопировать ошибочный конфиг {config_file_path} в {saved_config_filename}: {e_copy}")
-                        else:
-                            print(f"  Файл конфига {config_file_path} не найден для копирования при ошибке 23.")
-                    # Дальнейшие действия не нужны, finally всё почистит.
-                
-                else: # Процесс не упал сразу, продолжаем тестирование
-                    print(f"  Ядро Xray/V2Ray для {server_name} работает. Ожидание ~1.5 сек для стабилизации...")
-                    time.sleep(1.5) # Оставшееся время для стабилизации
-
-                    if test_server_connection(server_name):
-                        print(f"УСПЕХ: Сервер '{server_name}' ({server_details.get('server')}:{server_details.get('port')}) работает.")
-                        good_servers_for_this_subscription.append(server_details)
-                    else:
-                        print(f"НЕУДАЧА: Сервер '{server_name}' ({server_details.get('server')}:{server_details.get('port')}) не прошел проверку.")
-
-            except Exception as e:
-                print(f"  Ошибка при запуске или тестировании Xray/V2Ray для {server_name}: {e}")
-
-            finally:
-                if process:
-                    pid_for_log = process.pid if process.pid else 'N/A'
-                    print(f"  Остановка процесса для {server_name} (PID: {pid_for_log})...")
-                    
-                    # Если процесс еще работает и вывод не был собран (т.е. не было мгновенного падения)
-                    if process.poll() is None and stdout_data_early is None and stderr_data_early is None:
-                        try:
-                            stdout_data_late, stderr_data_late = process.communicate(timeout=0.5)
-                            if stdout_data_late and stdout_data_late.strip():
-                                print(f"  XRAY STDOUT (при остановке {server_name}):\\\\n{stdout_data_late.strip()}")
-                            if stderr_data_late and stderr_data_late.strip():
-                                print(f"  XRAY STDERR (при остановке {server_name}):\\\\n{stderr_data_late.strip()}")
-                        except subprocess.TimeoutExpired:
-                            print(f"  Не удалось получить stdout/stderr от {server_name} перед terminate (timeout).")
-                        except Exception as e_comm:
-                            print(f"  Ошибка при чтении stdout/stderr от {server_name} перед terminate: {e_comm}")
-
-                    # Убеждаемся, что процесс действительно остановлен
-                    if process.poll() is None:
-                        process.terminate()
-                        try:
-                            process.wait(timeout=5)
-                            print(f"  Процесс для {server_name} остановлен (terminate). Код: {process.returncode}")
-                        except subprocess.TimeoutExpired:
-                            print(f"  Процесс для {server_name} не завершился вовремя (terminate), принудительная остановка (kill)...")
-                            process.kill()
-                            try:
-                                process.wait(timeout=5)
-                                print(f"  Процесс для {server_name} остановлен (kill). Код: {process.returncode}")
-                            except subprocess.TimeoutExpired:
-                                print(f"  ПРЕДУПРЕЖДЕНИЕ: Процесс для {server_name} (PID: {pid_for_log}) не завершился даже после kill.")
-                            except Exception as e_wait_kill:
-                                print(f"  Ошибка при ожидании завершения процесса {server_name} после kill: {e_wait_kill}")
-                        except Exception as e_wait_term:
-                            print(f"  Ошибка при ожидании завершения процесса {server_name} после terminate: {e_wait_term}")
-                    else:
-                        # Если poll() не None, значит, он уже завершился.
-                        # Вывод либо был собран через stdout_data_early/stderr_data_early, либо не был (если упал без вывода)
-                        print(f"  Процесс для {server_name} уже был остановлен до основной логики остановки (код: {process.returncode}).")
-                
-                if config_file_path and os.path.exists(config_file_path):
-                    try:
-                        os.remove(config_file_path)
-                        # print(f"  Временный файл конфигурации {config_file_path} удален.")
-                    except Exception as e_rem:
-                        print(f"  Предупреждение: Не удалось удалить временный файл конфигурации {config_file_path}: {e_rem}")
+        latency_ms, download_mbps = test_server_connection(server_name_original)
         
-        if good_servers_for_this_subscription:
-            all_good_servers_overall_count += len(good_servers_for_this_subscription)
-            # Определяем имя файла для сохранения на основе имени исходного файла/URL
-            original_input_extension = os.path.splitext(urlparse(sub_url).path)[1].lower()
-            output_filename_suffix = "_good_servers"
-            
-            # Проверяем, является ли sub_url локальным путем к файлу
-            is_local_file = os.path.exists(sub_url)
-            
-            if is_local_file:
-                # Если это локальный файл, берем его расширение
-                _, original_input_extension = os.path.splitext(sub_url)
-                original_input_extension = original_input_extension.lower()
-                # Используем имя файла без расширения как output_filename_base
-                output_filename_base = os.path.splitext(os.path.basename(sub_url))[0]
-            else:
-                # Для URL используем существующую логику извлечения output_filename_base
-                # и original_input_extension уже определен выше из urlparse
-                pass # output_filename_base уже получен из fetch_server_configs
-            
-            # Формируем имя выходного файла
-            if original_input_extension == ".txt":
-                output_filename = f"{output_filename_base}{output_filename_suffix}.txt"
-                print(f"\nСохранение {len(good_servers_for_this_subscription)} хороших серверов в TXT (Base64) файл: {output_filename}")
-                
-                links_to_encode = []
-                for server in good_servers_for_this_subscription:
-                    link = None
-                    server_type = server.get("type", "").lower()
-                    
-                    if server_type == "trojan":
-                        link = format_trojan_link(server)
-                    elif server_type == "ss" or server_type == "shadowsocks":
-                        link = format_ss_link(server)
-                    elif server_type == "vmess":
-                        link = format_vmess_link(server)
-                    elif server_type == "vless":
-                        link = format_vless_link(server)
-                    
-                    if link:
-                        links_to_encode.append(link)
-                    else:
-                        print(f"  Предупреждение: Не удалось отформатировать ссылку для сервера: {server.get('name', 'N/A')}")
-                        # Fallback to name or some identifier if formatting fails
-                        links_to_encode.append(server.get("name", f"Unnamed_{server.get('type')}_{server.get('server')}"))
+        # Удаляем временный конфиг после теста одного сервера
+        if os.path.exists(TEMP_CONFIG_FILENAME):
+            try: os.remove(TEMP_CONFIG_FILENAME)
+            except OSError as e_rem_temp: print(f"  Предупреждение: Не удалось удалить {TEMP_CONFIG_FILENAME}: {e_rem_temp}")
 
-                if links_to_encode:
-                    full_subscription_content = "\n".join(links_to_encode)
-                    # Use urlsafe_b64encode for broader compatibility, though standard base64 often works.
-                    # V2RayN typically expects standard base64, not necessarily URL-safe for the whole blob.
-                    # Let's stick to standard base64 for the final output as per common subscription formats.
-                    base64_encoded_subscription = base64.b64encode(full_subscription_content.encode('utf-8')).decode('utf-8')
-                    
-                    with open(output_filename, 'w', encoding='utf-8') as f:
-                        f.write(base64_encoded_subscription)
-                    print(f"Сохранено в {output_filename}")
+        if latency_ms is not None and download_mbps > 0: # Сервер рабочий И тест скорости успешен (больше 0)
+            new_name = f"{download_mbps:.2f}MB/s | {server_name_original}"
+            
+            server_details_copy = server_details.copy()
+            server_details_copy['name'] = new_name
+            server_details_copy['latency_ms'] = latency_ms 
+            server_details_copy['download_mbps'] = download_mbps
+
+            source_id = server_details.get('source_info', {}).get('filename_base', 'unknown_source')
+            if source_id not in good_servers_by_source_identifier:
+                good_servers_by_source_identifier[source_id] = []
+            good_servers_by_source_identifier[source_id].append(server_details_copy)
+        # else: сервер не прошел проверку (сообщение об этом выводится в test_server_connection)
+    
+    # Сохранение хороших серверов
+    print("\n--- Итоги тестирования ---")
+    total_good_servers_saved = 0
+    if not good_servers_by_source_identifier:
+        print("Не найдено рабочих серверов, прошедших все проверки.")
+    else:
+        active_good_files_generated_this_run = set()
+        for source_id, servers_list in good_servers_by_source_identifier.items():
+            if not servers_list: continue # Пропускаем, если для источника нет хороших серверов
+
+            servers_list.sort(key=lambda s: (-s.get('download_mbps', 0), s.get('latency_ms', float('inf'))))
+            
+            # Определяем, в каком формате сохранять (по типу исходного файла или по умолчанию txt)
+            # Это потребует информации о типе исходного файла, которую нужно пробросить
+            # Пока что по умолчанию будем сохранять в .txt (список ссылок)
+            output_filename = f"{source_id}_good_servers.txt"
+            active_good_files_generated_this_run.add(output_filename)
+
+            formatted_links = []
+            for server in servers_list:
+                link = "" # Важно инициализировать
+                server_type = server.get("type", "").lower()
+                if server_type == 'trojan': link = format_trojan_link(server)
+                elif server_type == 'ss' or server_type == 'shadowsocks': link = format_ss_link(server)
+                elif server_type == 'vmess': link = format_vmess_link(server)
+                elif server_type == 'vless': link = format_vless_link(server)
+                if link:
+                    formatted_links.append(link)
                 else:
-                    print(f"Нет ссылок для кодирования и сохранения в {output_filename}")
+                    print(f"  Предупреждение: Не удалось отформатировать ссылку для сохранения сервера {server.get('name', 'N/A')} типа {server_type}")
             
-            else: # По умолчанию или если расширение было .yml/.yaml
-                final_extension = original_input_extension if original_input_extension in [".yml", ".yaml"] else ".yml"
-                output_filename = f"{output_filename_base}{output_filename_suffix}{final_extension}"
-                print(f"\nСохранение {len(good_servers_for_this_subscription)} хороших серверов в YAML файл: {output_filename}")
-                proxies_output = {'proxies': good_servers_for_this_subscription}
+            if formatted_links:
+                total_good_servers_saved += len(formatted_links)
+                print(f"Найдено {len(formatted_links)} рабочих серверов для источника '{source_id}'. Сохранение в {output_filename}")
                 try:
+                    # Если файл .txt, то сохраняем список ссылок, каждая на новой строке
+                    # Если файл .yml, то нужно сохранять как YAML {'proxies': servers_list}
+                    # TODO: Определить формат сохранения на основе исходного типа файла или по флагу
                     with open(output_filename, 'w', encoding='utf-8') as f:
-                        yaml.dump(proxies_output, f, allow_unicode=True, sort_keys=False, indent=2)
-                    print(f"Сохранено в {output_filename}")
-                except Exception as e:
-                    print(f"Ошибка при сохранении YAML файла {output_filename}: {e}")
-        else:
-            print(f"Для подписки {sub_url} не найдено работающих серверов.")
+                        f.write("\n".join(formatted_links))
+                    
+                    # Пример сохранения в base64 (если нужно для v2rayN)
+                    # base64_content = base64.b64encode("\n".join(formatted_links).encode('utf-8')).decode('utf-8')
+                    # with open(f"{source_id}_good_servers_b64.txt", 'w', encoding='utf-8') as f_b64:
+                    #     f_b64.write(base64_content)
+                    # print(f"  Также сохранено в Base64: {source_id}_good_servers_b64.txt")
+                    # active_good_files_generated_this_run.add(f"{source_id}_good_servers_b64.txt")
 
-    print(f"\n\n--- Итог ---")
-    print(f"Всего протестировано подписок: {len(subscriptions_data)}")
-    print(f"Общее количество найденных и сохраненных хороших серверов: {all_good_servers_overall_count}")
-    if os.path.exists(TEMP_CONFIG_FILENAME):
-        try:
-            os.remove(TEMP_CONFIG_FILENAME)
-            print(f"Финальное удаление временного файла конфигурации {TEMP_CONFIG_FILENAME} успешно.")
-        except Exception as e_remove_final:
-            print(f"Предупреждение: Не удалось удалить временный файл конфигурации {TEMP_CONFIG_FILENAME} в конце: {e_remove_final}")
+                except IOError as e_io_save:
+                    print(f"Ошибка записи в файл {output_filename}: {e_io_save}")
+            else:
+                print(f"Нет рабочих серверов для источника '{source_id}' для сохранения.")
+
+        # Удаление старых файлов _good_servers.txt/_good_servers.yml, которые не были обновлены
+        # (т.е. для которых в этом запуске не было найдено хороших серверов)
+        all_potentially_good_files_in_dir = [f for f in os.listdir('.') if re.match(r'.+_good_servers\.(txt|yml|yaml)$', f)]
+        # Добавить сюда и _b64.txt, если они генерируются
+        # all_potentially_good_files_in_dir.extend([f for f in os.listdir('.') if re.match(r'.+_good_servers_b64\.txt$', f)])
+
+        for old_file in all_potentially_good_files_in_dir:
+            if old_file not in active_good_files_generated_this_run:
+                try:
+                    os.remove(old_file)
+                    print(f"Удален старый/неактуальный файл хороших серверов: {old_file}")
+                except OSError as e_rem_old:
+                    print(f"Ошибка при удалении старого файла {old_file}: {e_rem_old}")
+
+
+    print(f"\nВсего найдено и сохранено рабочих серверов (прошедших все проверки): {total_good_servers_saved}")
+    end_total_time = time.time()
+    # Используем timedelta для красивого вывода времени
+    print(f"Скрипт завершил работу за {datetime.timedelta(seconds=end_total_time - start_total_time)}")
+
 
 if __name__ == '__main__':
     start_time = time.time()
     main()
     end_time = time.time()
-    print(f"Скрипт завершил работу за {end_time - start_time:.2f} секунд.")
+    # print(f"Скрипт завершил работу за {end_time - start_time:.2f} секунд.") # Заменено на timedelta в main
