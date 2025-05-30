@@ -25,6 +25,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
+      - name: Configure git and pull changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git pull --rebase origin $(git rev-parse --abbrev-ref HEAD)
+
       - name: Run parser script
         id: parser
         run: |
@@ -33,9 +39,6 @@ jobs:
 
       - name: Commit and push if changed
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git pull --rebase origin $(git rev-parse --abbrev-ref HEAD) # Update current local branch
           git add ${{ steps.parser.outputs.filename }}
           # Проверяем, есть ли изменения для коммита
           if git diff --staged --quiet; then
