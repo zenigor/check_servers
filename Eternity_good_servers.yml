@@ -191,12 +191,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
-- name: 🇳🇱NL-149.34.244.68-0331 | 31.917MB
-  server: 149.34.244.68
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇬🇧GB-131.145.4.128-0324 | 31.334MB
   server: admin.c2.webramz.co
   port: 443
@@ -365,6 +359,55 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
+- name: 🇷🇺RU-45.139.24.24-5807 | 4.57MB
+  server: 45.139.24.24
+  port: 57456
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 360e21d21977dc11
+- name: 🇭🇰HK-1.65.139.3-0440 | 4.231MB
+  server: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 94614d84-9986-11ee-be7f-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
+- name: 🇭🇰HK-1.65.139.3-5375 | 4.191MB
+  server: bb7de241-swkhs0-sxd0pj-1rgsa.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 096d1c9a-9e52-11ef-87a8-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: bb7de241-swkhs0-sxd0pj-1rgsa.hgc1.tcpbbr.net
+- name: 🇭🇰HK-1.65.139.3-0478 | 4.148MB
+  server: 1deb35dd-svn5s0-t1j1pq-sett.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 303436ce-f8c5-11ef-8400-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  servername: 🇭🇰HK-1.65.139.3-0478 | 4.148MB
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 1deb35dd-svn5s0-t1j1pq-sett.hgc1.tcpbbr.net
 - name: 🇬🇧GB-212.102.53.196-0342 | 3.9MB
   server: 212.102.53.196
   port: 443
