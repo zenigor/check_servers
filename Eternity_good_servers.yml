@@ -377,12 +377,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: 🇷🇺RU-45.139.24.24-5807 | 9.816MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: 🇭🇰HK-1.65.139.3-0440 | 6.231MB
   server: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
   port: 8080
@@ -426,3 +420,9 @@ proxies:
     path: /
     headers:
       Host: 1deb35dd-svn5s0-t1j1pq-sett.hgc1.tcpbbr.net
+- name: 🇬🇧GB-212.102.53.196-0342 | 5.718MB
+  server: 212.102.53.196
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
