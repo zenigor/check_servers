@@ -335,12 +335,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
-- name: 🇷🇺RU-176.32.35.68-5995 | 16.993MB
-  server: 176.32.35.68
-  port: 2022
-  type: ss
-  cipher: aes-256-gcm
-  password: 4194ce5b1f36f660
 - name: 🇷🇺RU-45.151.62.54-0380 | 16.35MB
   server: 45.151.62.54
   port: 28825
@@ -432,9 +426,3 @@ proxies:
     path: /
     headers:
       Host: 1deb35dd-svn5s0-t1j1pq-sett.hgc1.tcpbbr.net
-- name: 🇬🇧GB-212.102.53.196-0342 | 5.718MB
-  server: 212.102.53.196
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
