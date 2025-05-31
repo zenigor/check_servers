@@ -41,6 +41,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇨🇦CA-79.127.233.170-0367 | 73.748MB
+  server: 79.127.233.170
+  port: 990
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: f8f7aCzcPKbsF8p3
 - name: 🇺🇸US-212.102.47.131-0359 | 71.604MB
   server: 212.102.47.131
   port: 443
@@ -221,6 +227,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: u17T3BvpYaaiuW2c
+- name: 🇬🇧GB-212.102.53.197-0335 | 30.87MB
+  server: 212.102.53.197
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: CH-156.146.62.162-0366 | 30.825MB
   server: 156.146.62.162
   port: 443
@@ -353,46 +365,9 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: 🇭🇰HK-1.65.139.3-0440 | 4.231MB
-  server: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 94614d84-9986-11ee-be7f-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
-- name: 🇭🇰HK-1.65.139.3-5375 | 4.191MB
-  server: bb7de241-swkhs0-sxd0pj-1rgsa.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 096d1c9a-9e52-11ef-87a8-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: bb7de241-swkhs0-sxd0pj-1rgsa.hgc1.tcpbbr.net
-- name: 🇭🇰HK-1.65.139.3-0478 | 4.148MB
-  server: 1deb35dd-svn5s0-t1j1pq-sett.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 303436ce-f8c5-11ef-8400-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  servername: 🇭🇰HK-1.65.139.3-0478 | 4.148MB
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: 1deb35dd-svn5s0-t1j1pq-sett.hgc1.tcpbbr.net
+- name: 🇬🇧GB-212.102.53.196-0342 | 3.9MB
+  server: 212.102.53.196
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
