@@ -353,18 +353,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
-- name: 🇯🇵JP-45.89.109.184-0253 | 15.366MB
-  server: 45.89.109.184
-  port: 10001
-  type: ss
-  cipher: aes-128-gcm
-  password: 0dc0a0ee-008c-4063-b2f6-b1fd2b8ef47b
-- name: LU-107.189.6.201-5988 | 13.808MB
-  server: 107.189.6.201
-  port: 2025
-  type: ss
-  cipher: aes-256-gcm
-  password: 2e1f9c8d0d4f7988
 - name: 🇨🇦CA-142.4.216.225-5133 | 12.622MB
   server: 142.4.216.225
   port: 80
