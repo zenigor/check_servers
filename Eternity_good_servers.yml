@@ -353,6 +353,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
+- name: 🇯🇵JP-45.89.109.184-0253 | 15.366MB
+  server: 45.89.109.184
+  port: 10001
+  type: ss
+  cipher: aes-128-gcm
+  password: 0dc0a0ee-008c-4063-b2f6-b1fd2b8ef47b
 - name: 🇨🇦CA-142.4.216.225-5133 | 12.622MB
   server: 142.4.216.225
   port: 80
@@ -365,6 +371,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
+- name: 🇷🇺RU-45.139.24.24-5807 | 9.816MB
+  server: 45.139.24.24
+  port: 57456
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 360e21d21977dc11
 - name: 🇭🇰HK-1.65.139.3-0440 | 6.231MB
   server: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
   port: 8080
