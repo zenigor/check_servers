@@ -77,6 +77,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇺🇸US-173.244.56.9-0284 | 40.316MB
+  server: 173.244.56.9
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-74.177.212.246-2214 | 39.518MB
   server: admin.c4.webramz.co
   port: 443
@@ -321,12 +327,6 @@ proxies:
   password: shadowsocks
 - name: 🇬🇧GB-141.98.101.178-0403 | 19.234MB
   server: 141.98.101.178
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇯🇵JP-149.22.87.240-0312 | 19.233MB
-  server: 149.22.87.240
   port: 443
   type: ss
   cipher: aes-128-gcm
