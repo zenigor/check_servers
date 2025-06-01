@@ -65,6 +65,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇨🇦CA-79.127.233.170-0291 | 44.204MB
+  server: 79.127.233.170
+  port: 990
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: f8f7aCzcPKbsF8p3
 - name: 🇺🇸US-212.102.47.132-0313 | 42.105MB
   server: 212.102.47.132
   port: 443
@@ -353,12 +359,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: 🇷🇺RU-45.139.24.24-5671 | 12.794MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: 🇯🇵JP-45.89.109.184-0396 | 11.21MB
   server: 45.89.109.184
   port: 10001
@@ -383,20 +383,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
-- name: 🇭🇰HK-1.65.204.22-5778 | 7.126MB
-  server: e0784ed0-swq1s0-sxzls8-1gxvd.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 398e0d38-8649-11ef-959c-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: e0784ed0-swq1s0-sxzls8-1gxvd.hgc1.tcpbbr.net
 - name: 🇭🇰HK-1.65.204.22-5229 | 6.717MB
   server: e0b97381-swo740-sy0k9b-yjq0.hgc1.tcpbbr.net
   port: 8080
