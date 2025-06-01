@@ -1,0 +1,75 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "google",
+        "address": "8.8.8.8",
+        "detour": "direct"
+      },
+      {
+        "tag": "cloudflare",
+        "address": "1.1.1.1",
+        "detour": "direct"
+      }
+    ],
+    "strategy": "prefer_ipv4",
+    "disable_cache": false,
+    "disable_expire": false
+  },
+  "inbounds": [
+    {
+      "type": "socks",
+      "tag": "socks-in",
+      "listen": "127.0.0.1",
+      "listen_port": 10809,
+      "sniff": true,
+      "sniff_override_destination": false,
+      "udp_fragment": true,
+      "udp_timeout": 300
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "shadowsocks",
+      "tag": "rus_ss_vpn_out",
+      "server": "45.151.62.54",
+      "server_port": 28825,
+      "method": "chacha20-ietf-poly1305",
+      "password": "0zyDZ1XmNXaaCAN7KEA8a",
+      "udp_over_tcp": false,
+      "multiplex": {
+        "enabled": false,
+        "protocol": "smux",
+        "max_streams": 32
+      }
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "protocol": [
+          "dns"
+        ],
+        "outbound": "dns-out"
+      },
+      {
+        "inbound": ["socks-in"],
+        "outbound": "rus_ss_vpn_out"
+      }
+    ],
+    "final": "direct",
+    "auto_detect_interface": true
+  }
+} 

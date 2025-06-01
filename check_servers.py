@@ -28,6 +28,15 @@ REQUEST_TIMEOUT = 15    # Таймаут для основной проверк�
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 MAX_SERVERS_TO_TEST = 0
 DEBUG_SAVE_CONFIG = True # Флаг для сохранения конфигов, вызвавших ошибку 23
+
+# --- Настройки для проксирования через sing-box ---
+# Установите USE_SING_BOX_PROXY_IF_CONFIGURED = True, чтобы включить эту функцию.
+# Убедитесь, что sing-box настроен на предоставление SOCKS5 прокси на SING_BOX_LOCAL_SOCKS_PORT.
+USE_SING_BOX_PROXY_IF_CONFIGURED = False # По умолчанию выключено
+SING_BOX_EXECUTABLE_PATH = "core/sing-box.exe" # Пример: "core/sing-box.exe" или "/usr/local/bin/sing-box"
+SING_BOX_RUSSIAN_VPN_CONFIG_PATH = "core/sing-box-russian-config.json" # Пример: "core/config_ru_vpn.json"
+SING_BOX_LOCAL_SOCKS_PORT = 10809 # Порт, на котором sing-box будет предоставлять SOCKS5 прокси
+# --- Конец настроек для sing-box ---
 # --- КОНЕЦ КОНФИГУРАЦИИ ---
 
 def check_core_executable():
@@ -566,7 +575,7 @@ def fetch_server_configs(url, custom_regex_pattern=None):
         print(f"Непредвиденная ошибка при обработке {url}: {e_global}")
         return None, output_filename_base
 
-def create_v2ray_config(server_details):
+def create_v2ray_config(server_details, use_sing_box_proxy=False):
     config = {
         "log": {"loglevel": "warning"},
         "inbounds": [{
@@ -682,6 +691,39 @@ def create_v2ray_config(server_details):
             outbound_config["streamSettings"]["xtlsSettings"] = common_tls_xtls_settings
 
     config["outbounds"].append(outbound_config)
+    
+    # Добавление sing-box как прокси, если включено
+    if use_sing_box_proxy:
+        if not any(out.get("tag") == "russian_proxy_via_singbox" for out in config["outbounds"]):
+            print(f"  Добавление исходящего SOCKS5 прокси через sing-box (127.0.0.1:{SING_BOX_LOCAL_SOCKS_PORT}) для сервера {server_details.get('name', 'N/A')}.")
+            config["outbounds"].insert(0, { # Вставляем в начало, чтобы теги были доступны
+                "protocol": "socks",
+                "settings": {
+                    "servers": [{
+                        "address": "127.0.0.1",
+                        "port": SING_BOX_LOCAL_SOCKS_PORT
+                    }]
+                },
+                "tag": "russian_proxy_via_singbox"
+            })
+        
+        # Назначаем sing-box прокси основному исходящему соединению
+        # Основной outbound должен быть первым в списке после добавления sing-box прокси (если он есть)
+        # или если sing-box не используется, он и так будет первым подходящим (не 'direct')
+        main_outbound_index = -1
+        for i, out_cfg in enumerate(config["outbounds"]):
+            if out_cfg.get("protocol") not in ["freedom", "socks", "blackhole"] and out_cfg.get("tag") != "russian_proxy_via_singbox":
+                main_outbound_index = i
+                break
+        
+        if main_outbound_index != -1:
+            if "proxySettings" not in config["outbounds"][main_outbound_index] or \
+               config["outbounds"][main_outbound_index].get("proxySettings", {}).get("tag") != "russian_proxy_via_singbox":
+                config["outbounds"][main_outbound_index]["proxySettings"] = {"tag": "russian_proxy_via_singbox"}
+                print(f"  Основной исходящий узел ({config['outbounds'][main_outbound_index].get('protocol')}) для {server_details.get('name', 'N/A')} будет использовать прокси 'russian_proxy_via_singbox'.")
+        else:
+            print(f"  Предупреждение: Не удалось найти основной исходящий узел для назначения прокси sing-box для сервера {server_details.get('name', 'N/A')}.")
+
     config["outbounds"].append({"protocol": "freedom", "tag": "direct", "settings": {}})
     try:
         with open(TEMP_CONFIG_FILENAME, 'w', encoding='utf-8') as f:
@@ -758,6 +800,49 @@ def test_server_connection(server_name):
 def main():
     if not check_core_executable():
         return
+
+    sing_box_process = None # Для хранения процесса sing-box
+
+    if USE_SING_BOX_PROXY_IF_CONFIGURED:
+        print("--- Попытка запуска sing-box для проксирования трафика ---")
+        if not SING_BOX_EXECUTABLE_PATH or not os.path.exists(SING_BOX_EXECUTABLE_PATH):
+            print(f"  Ошибка: Исполняемый файл sing-box '{SING_BOX_EXECUTABLE_PATH}' не найден или путь не указан.")
+            print("  Проксирование через sing-box будет отключено.")
+            use_sing_box = False
+        elif not SING_BOX_RUSSIAN_VPN_CONFIG_PATH or not os.path.exists(SING_BOX_RUSSIAN_VPN_CONFIG_PATH):
+            print(f"  Ошибка: Файл конфигурации sing-box '{SING_BOX_RUSSIAN_VPN_CONFIG_PATH}' не найден или путь не указан.")
+            print("  Проксирование через sing-box будет отключено.")
+            use_sing_box = False
+        else:
+            try:
+                print(f"  Запуск sing-box с конфигурацией: {SING_BOX_RUSSIAN_VPN_CONFIG_PATH}")
+                # Запускаем sing-box в фоновом режиме. Убедитесь, что sing-box настроен правильно
+                # и не выводит слишком много в stdout/stderr, чтобы не мешать основному логу.
+                # Возможно, потребуется настроить логирование sing-box в файл в его конфигурации.
+                sing_box_command = [SING_BOX_EXECUTABLE_PATH, "run", "-c", SING_BOX_RUSSIAN_VPN_CONFIG_PATH]
+                sing_box_process = subprocess.Popen(sing_box_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8')
+                print(f"  sing-box запущен (PID: {sing_box_process.pid}). Ожидание ~2 секунд для стабилизации...")
+                time.sleep(2) # Даем время sing-box-у запуститься и подключиться
+                if sing_box_process.poll() is not None:
+                    print(f"  КРИТИЧЕСКАЯ ОШИБКА: sing-box завершился сразу после запуска с кодом {sing_box_process.returncode}.")
+                    stdout_sb, stderr_sb = sing_box_process.communicate()
+                    if stdout_sb and stdout_sb.strip(): print(f"  SING-BOX STDOUT:\\n{stdout_sb.strip()}")
+                    if stderr_sb and stderr_sb.strip(): print(f"  SING-BOX STDERR:\\n{stderr_sb.strip()}")
+                    sing_box_process = None # Сбрасываем, так как он не работает
+                    use_sing_box = False
+                    print("  Проксирование через sing-box будет отключено.")
+                else:
+                    print(f"  sing-box работает. Тесты будут проводиться через прокси 127.0.0.1:{SING_BOX_LOCAL_SOCKS_PORT}")
+                    use_sing_box = True
+            except Exception as e_sb_start:
+                print(f"  Ошибка при запуске sing-box: {e_sb_start}")
+                sing_box_process = None # Убедимся, что он None если была ошибка
+                use_sing_box = False
+                print("  Проксирование через sing-box будет отключено.")
+    else:
+        use_sing_box = False
+        print("--- Проксирование через sing-box отключено в конфигурации (USE_SING_BOX_PROXY_IF_CONFIGURED = False) ---")
+
 
     if not os.path.exists(SUBSCRIPTIONS_FILENAME):
         print(f"Файл с подписками '{SUBSCRIPTIONS_FILENAME}' не найден. Пожалуйста, создайте его и добавьте URL-адреса подписок.")
@@ -841,7 +926,7 @@ def main():
             process = None      # Для finally
 
             try:
-                config_file_path = create_v2ray_config(server_details)
+                config_file_path = create_v2ray_config(server_details, use_sing_box_proxy=use_sing_box)
                 if not config_file_path:
                     print(f"  Не удалось создать конфигурационный файл для {server_name}. Пропуск.")
                     continue
@@ -1020,6 +1105,30 @@ def main():
             print(f"Финальное удаление временного файла конфигурации {TEMP_CONFIG_FILENAME} успешно.")
         except Exception as e_remove_final:
             print(f"Предупреждение: Не удалось удалить временный файл конфигурации {TEMP_CONFIG_FILENAME} в конце: {e_remove_final}")
+
+    if sing_box_process:
+        print(f"--- Остановка sing-box (PID: {sing_box_process.pid}) ---")
+        sing_box_process.terminate()
+        try:
+            stdout_sb_end, stderr_sb_end = sing_box_process.communicate(timeout=5) # Даем время на сбор вывода
+            print(f"  sing-box остановлен (terminate). Код возврата: {sing_box_process.returncode}")
+            if stdout_sb_end and stdout_sb_end.strip():
+                print(f"  SING-BOX STDOUT (при остановке):\\n{stdout_sb_end.strip()}")
+            if stderr_sb_end and stderr_sb_end.strip():
+                print(f"  SING-BOX STDERR (при остановке):\\n{stderr_sb_end.strip()}")
+        except subprocess.TimeoutExpired:
+            print(f"  sing-box не ответил на terminate в течение 5 секунд. Принудительная остановка (kill)...")
+            sing_box_process.kill()
+            try:
+                sing_box_process.wait(timeout=5)
+                print(f"  sing-box остановлен (kill). Код возврата: {sing_box_process.returncode}")
+            except subprocess.TimeoutExpired:
+                print(f"  ПРЕДУПРЕЖДЕНИЕ: sing-box (PID: {sing_box_process.pid}) не завершился даже после kill.")
+            except Exception as e_sb_wait_kill:
+                print(f"  Ошибка при ожидании завершения sing-box после kill: {e_sb_wait_kill}")
+        except Exception as e_sb_comm:
+            print(f"  Ошибка при получении вывода от sing-box во время остановки: {e_sb_comm}")
+
 
 if __name__ == '__main__':
     start_time = time.time()
