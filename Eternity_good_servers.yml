@@ -347,12 +347,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: 🇯🇵JP-45.89.109.184-0396 | 4.797MB
-  server: 45.89.109.184
-  port: 10001
-  type: ss
-  cipher: aes-128-gcm
-  password: 0dc0a0ee-008c-4063-b2f6-b1fd2b8ef47b
 - name: TH-116.206.124.41-5682 | 4.737MB
   server: 116.206.124.41
   port: 34045
@@ -385,6 +379,21 @@ proxies:
     path: /
     headers:
       Host: e0b97381-swo740-sy0k9b-yjq0.hgc1.tcpbbr.net
+- name: 🇭🇰HK-1.65.204.22-5268 | 3.274MB
+  server: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 94614d84-9986-11ee-be7f-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  servername: 🇭🇰HK-1.65.204.22-5268 | 3.274MB
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: a1aa5069-swd340-t7fl9b-1q16i.hgc1.tcpbbr.net
 - name: 🇭🇰HK-1.65.204.22-5264 | 3.198MB
   server: 1ec053e0-swd340-t4m86v-1s9pj.hgc1.tcpbbr.net
   port: 8080
@@ -478,3 +487,17 @@ proxies:
     path: /
     headers:
       Host: 77becdb4-sw7j40-t94bdb-mrtr.hgc1.tcpbbr.net
+- name: 🇭🇰HK-1.65.204.22-0706 | 2.131MB
+  server: bc842b49-swexs0-t1rt5e-1s09x.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 62b7824e-47dc-11ef-9f2d-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: broadcastlv.chat.bilibili.com
