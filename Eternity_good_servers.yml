@@ -191,6 +191,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
+- name: 🇳🇱NL-149.34.244.68-0331 | 31.917MB
+  server: 149.34.244.68
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-131.145.4.128-0324 | 31.334MB
   server: admin.c2.webramz.co
   port: 443
