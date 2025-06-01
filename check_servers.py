@@ -32,7 +32,7 @@ DEBUG_SAVE_CONFIG = True # Флаг для сохранения конфигов
 # --- Настройки для проксирования через sing-box ---
 # Установите USE_SING_BOX_PROXY_IF_CONFIGURED = True, чтобы включить эту функцию.
 # Убедитесь, что sing-box настроен на предоставление SOCKS5 прокси на SING_BOX_LOCAL_SOCKS_PORT.
-USE_SING_BOX_PROXY_IF_CONFIGURED = False # По умолчанию выключено
+USE_SING_BOX_PROXY_IF_CONFIGURED = True # По умолчанию выключено
 SING_BOX_EXECUTABLE_PATH = "core/sing-box.exe" # Пример: "core/sing-box.exe" или "/usr/local/bin/sing-box"
 SING_BOX_RUSSIAN_VPN_CONFIG_PATH = "core/sing-box-russian-config.json" # Пример: "core/config_ru_vpn.json"
 SING_BOX_LOCAL_SOCKS_PORT = 10809 # Порт, на котором sing-box будет предоставлять SOCKS5 прокси
