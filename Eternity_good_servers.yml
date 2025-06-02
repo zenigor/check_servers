@@ -131,12 +131,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 44fe4b7d-cd48-45fc-a036-60ea40e4a96c
-- name: 🇬🇧GB-212.102.53.197-0341 | 21.729MB
-  server: 212.102.53.197
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇬🇧GB-212.102.53.196-0308 | 21.222MB
   server: 212.102.53.196
   port: 443
@@ -375,3 +369,18 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
+- name: 🇭🇰HK-1.65.139.208-5395 | 2.931MB
+  server: e9a671ea-sw1z40-t4vk19-1nlwy.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 9247343a-5db0-11ee-9367-f23c91369f2d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  servername: 🇭🇰HK-1.65.139.208-5395 | 2.931MB
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: e9a671ea-sw1z40-t4vk19-1nlwy.hgc1.tcpbbr.net
