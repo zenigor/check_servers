@@ -391,12 +391,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0RsrcFJ1vOsWEqg3P55hvaacKfuShT0cc1h0t8AD0NA8u1uR
-- name: 🇷🇺RU-45.139.24.24-5751 | 7.274MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: RELAY-104.21.96.1-0743 | 7.223MB
   server: 104.21.96.1
   port: 2096
@@ -417,9 +411,66 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
+- name: 🇭🇰HK-1.65.139.208-5356 | 5.441MB
+  server: e0b97381-swo740-sy0k9b-yjq0.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 25b2699a-e18e-11ec-8e69-f23c91cfbbc9
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: e0b97381-swo740-sy0k9b-yjq0.hgc1.tcpbbr.net
 - name: CH-204.136.10.115-0444 | 5.364MB
   server: 204.136.10.115
   port: 1866
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
+- name: 🇭🇰HK-1.65.139.208-5377 | 5.241MB
+  server: 754d8a58-swmcg0-sy0k9b-yjq0.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 25b2699a-e18e-11ec-8e69-f23c91cfbbc9
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 754d8a58-swmcg0-sy0k9b-yjq0.hgc1.tcpbbr.net
+- name: 🇭🇰HK-1.65.139.208-5375 | 4.477MB
+  server: 03566c42-swzb40-sznzxg-1jfvb.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 06b2ac52-fcc6-11ec-bb74-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  servername: 🇭🇰HK-1.65.139.208-5375 | 4.477MB
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 03566c42-swzb40-sznzxg-1jfvb.hgc1.tcpbbr.net
+- name: 🇭🇰HK-1.65.139.208-5374 | 4.379MB
+  server: d98cad7b-swkhs0-swwn15-1phla.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: 467f2940-77cd-11ee-b5ed-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: d98cad7b-swkhs0-swwn15-1phla.hgc1.tcpbbr.net
