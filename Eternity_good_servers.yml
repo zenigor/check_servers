@@ -113,6 +113,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: b25727df-15ea-453c-a006-13fe98fee1d2
+- name: 🇯🇵JP-149.22.87.204-0359 | 24.137MB
+  server: 149.22.87.204
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇳🇱NL-149.34.244.68-0312 | 22.261MB
   server: 149.34.244.68
   port: 443
@@ -227,6 +233,20 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: WstuSnlu4ieA9M0L
+- name: RELAY-104.21.23.231-0686 | 18.834MB
+  server: cs.flha.ru
+  port: 2082
+  type: vmess
+  uuid: 2f821152-c3e9-4074-9185-2790e7425f42
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: cs.flha.ru
 - name: 🇬🇧GB-172.166.13.118-0300 | 18.736MB
   server: admin.c4.webramz.co
   port: 443
@@ -355,18 +375,3 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
-- name: 🇭🇰HK-1.65.139.208-5395 | 2.931MB
-  server: e9a671ea-sw1z40-t4vk19-1nlwy.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 9247343a-5db0-11ee-9367-f23c91369f2d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  servername: 🇭🇰HK-1.65.139.208-5395 | 2.931MB
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: e9a671ea-sw1z40-t4vk19-1nlwy.hgc1.tcpbbr.net
