@@ -65,6 +65,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇺🇸US-173.244.56.9-0275 | 56.837MB
+  server: 173.244.56.9
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇺🇸US-212.102.47.129-0300 | 55.382MB
   server: 212.102.47.129
   port: 443
@@ -281,6 +287,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 1xO2cqPazqjGfCfd
+- name: 🇬🇧GB-141.98.101.178-0354 | 24.596MB
+  server: 141.98.101.178
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇷🇺RU-45.151.62.54-0368 | 22.66MB
   server: 45.151.62.54
   port: 28825
@@ -349,6 +361,12 @@ proxies:
     path: /
     headers:
       Host: de01.sh-cloudflare.sbs
+- name: TH-116.206.124.41-0391 | 12.743MB
+  server: 116.206.124.41
+  port: 34045
+  type: ss
+  cipher: aes-256-gcm
+  password: TG:@Enkelte_notif&&TG:@Notif_Chat
 - name: 🇷🇺RU-5.189.201.250-0387 | 12.436MB
   server: 5.189.201.250
   port: 31348
