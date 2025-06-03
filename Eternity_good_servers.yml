@@ -343,12 +343,6 @@ proxies:
     path: /
     headers:
       Host: de01.sh-cloudflare.sbs
-- name: 🇯🇵JP-45.89.109.184-5522 | 10.399MB
-  server: 45.89.109.184
-  port: 10001
-  type: ss
-  cipher: aes-128-gcm
-  password: 0dc0a0ee-008c-4063-b2f6-b1fd2b8ef47b
 - name: TH-116.206.124.41-0333 | 10.006MB
   server: 116.206.124.41
   port: 34045
@@ -549,20 +543,6 @@ proxies:
     path: /
     headers:
       Host: 0e1121ca-swd340-teqqcv-1rc6n.hgc1.tcpbbr.net
-- name: 🇭🇰HK-1.65.139.55-5372 | 2.863MB
-  server: e4d173ea-swd340-sykxcb-1nhp7.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 5fc9c9aa-ea47-11ed-8397-f23c913c8d2b
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: e4d173ea-swd340-sykxcb-1nhp7.hgc1.tcpbbr.net
 - name: 🇭🇰HK-1.65.139.55-5417 | 2.752MB
   server: 456c0ed1-swq1s0-t3imuc-2nr6.hgc1.tcpbbr.net
   port: 8080
