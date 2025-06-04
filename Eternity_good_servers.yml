@@ -191,6 +191,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇳🇱NL-149.34.244.68-0298 | 20.962MB
+  server: 149.34.244.68
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-212.102.53.197-0280 | 20.816MB
   server: uk-dc1.yangon.club
   port: 443
@@ -317,6 +323,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0zyDRZ1XmNXaaCAN7KEA8a
+- name: PY-38.165.233.18-0337 | 15.971MB
+  server: 38.165.233.18
+  port: 990
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: f8f7aCzcPKbsF8p3
 - name: 🇵🇱PL-45.144.48.63-0339 | 15.802MB
   server: 45.144.48.63
   port: 57456
@@ -359,6 +371,20 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 360e21d21977dc11
+- name: 🇭🇰HK-1.65.139.59-0175 | 3.775MB
+  server: 2abb3c67-swkhs0-t1457r-g53t.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: b778e4ae-1458-11ec-a8bf-f23c91cfbbc9
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 2abb3c67-swkhs0-t1457r-g53t.hgc1.tcpbbr.net
 - name: 🇫🇷FR-51.195.119.47-5257 | 3.719MB
   server: 51.195.119.47
   port: 1080
@@ -371,3 +397,17 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
+- name: 🇭🇰HK-1.65.139.59-0702 | 3.003MB
+  server: 507dabb3-swtr40-sxzp1j-1irfn.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: a33115b6-75fa-11ed-8826-f23c9164ca5d
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 507dabb3-swtr40-sxzp1j-1irfn.hgc1.tcpbbr.net
