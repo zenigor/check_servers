@@ -317,6 +317,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0zyDRZ1XmNXaaCAN7KEA8a
+- name: PY-38.165.233.18-0337 | 15.971MB
+  server: 38.165.233.18
+  port: 990
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: f8f7aCzcPKbsF8p3
 - name: 🇵🇱PL-45.144.48.63-0339 | 15.802MB
   server: 45.144.48.63
   port: 57456
@@ -329,6 +335,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: d3837224ed465f00
+- name: TH-116.206.124.41-0360 | 14.495MB
+  server: 116.206.124.41
+  port: 34045
+  type: ss
+  cipher: aes-256-gcm
+  password: TG:@Enkelte_notif&&TG:@Notif_Chat
 - name: 🇨🇦CA-142.4.216.225-0362 | 13.542MB
   server: ca225.vpnbook.com
   port: 80
