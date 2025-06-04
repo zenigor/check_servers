@@ -35,6 +35,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇺🇸US-156.146.38.169-0231 | 67.178MB
+  server: 156.146.38.169
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇺🇸US-156.146.38.168-0313 | 60.952MB
   server: 156.146.38.168
   port: 443
@@ -163,6 +169,12 @@ proxies:
   password: shadowsocks
 - name: 🇬🇧GB-212.102.53.80-0268 | 35.203MB
   server: 212.102.53.80
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.197-0308 | 34.974MB
+  server: uk-dc1.yangon.club
   port: 443
   type: ss
   cipher: aes-128-gcm
@@ -317,6 +329,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0zyDRZ1XmNXaaCAN7KEA8a
+- name: 🇪🇸ES-92.38.171.215-5081 | 15.211MB
+  server: 92.38.171.215
+  port: 31348
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 0RsrcFJ1vOsWEqg3P55hvaacKfuShT0cc1h0t8AD0NA8u1uR
 - name: 🇷🇺RU-5.189.201.250-0318 | 13.472MB
   server: 5.189.201.250
   port: 31348
@@ -329,9 +347,37 @@ proxies:
   type: ss
   cipher: aes-256-gcm
   password: TG:@Enkelte_notif&&TG:@Notif_Chat
+- name: 🇭🇰HK-1.65.197.146-5137 | 6.496MB
+  server: b8605f97-swq1s0-swwcfg-1eijl.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: c2b58ae0-d21c-11ef-b414-f23c91cfbbc9
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: b8605f97-swq1s0-swwcfg-1eijl.hgc1.tcpbbr.net
 - name: 🇩🇪DE-185.177.229.245-0347 | 6.098MB
   server: 185.177.229.245
   port: 1866
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
+- name: 🇭🇰HK-1.65.197.146-0164 | 5.408MB
+  server: b959ad51-sxaf40-t323lh-1t0nn.hgc1.tcpbbr.net
+  port: 8080
+  type: vmess
+  uuid: ba78226c-b772-11ef-ab53-f23c91cfbbc9
+  alterId: 0
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: broadcastlv.chat.bilibili.com
