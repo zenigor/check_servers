@@ -317,20 +317,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: RELAY-172.64.80.1-0204 | 19.438MB
-  server: tci5.tiamoci.us.kg
-  port: 80
-  type: vmess
-  uuid: 5f0aa94f-4e12-4703-90b5-bd4f57c96d3d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: tci5.tiamoci.us.kg
 - name: 🇰🇷KR-141.164.63.32-0376 | 19.146MB
   server: 141.164.63.32
   port: 30936
@@ -361,20 +347,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0RsrcFJ1vOsWEqg3P55hvaacKfuShT0cc1h0t8AD0NA8u1uR
-- name: 🇭🇰HK-1.65.205.215-1031 | 6.497MB
-  server: 64f6e0b2-sw1z40-t51bp0-1nyy5.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 8f7cb770-1305-11ee-b107-f23c91cfbbc9
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: 64f6e0b2-sw1z40-t51bp0-1nyy5.hgc1.tcpbbr.net
 - name: 🇭🇰HK-1.65.205.215-1038 | 6.281MB
   server: e6eb5fca-swexs0-sycpj3-18jxd.hgc1.tcpbbr.net
   port: 8080
