@@ -83,18 +83,42 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 69MUii7VDwMqh7Hz
+- name: 🇬🇧GB-85.210.120.237-0264 | 39.336MB
+  server: admin.c3.webramz.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: Bog0ELmMM9DSxDdQ
+- name: 🇬🇧GB-85.210.120.237-0269 | 38.666MB
+  server: 85.210.120.237
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: Bog0ELmMM9DSxDdQ
 - name: 🇬🇧GB-131.145.114.158-0250 | 38.653MB
   server: series-a2.samanehha.co
   port: 443
   type: ss
   cipher: chacha20-ietf-poly1305
   password: W74XFALLLuw6m5IA
+- name: 🇬🇧GB-85.210.120.237-0248 | 38.448MB
+  server: series-a2-me.varzesh360.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: Bog0ELmMM9DSxDdQ
 - name: 🇬🇧GB-74.177.199.210-0257 | 38.352MB
   server: admin.c2.webramz.co
   port: 443
   type: ss
   cipher: chacha20-ietf-poly1305
   password: WstuSnlu4ieA9M0L
+- name: 🇬🇧GB-85.210.120.237-0291 | 38.112MB
+  server: series-a2-me.samanehha.co
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: Bog0ELmMM9DSxDdQ
 - name: 🇺🇸US-173.244.56.9-0232 | 38.062MB
   server: 173.244.56.9
   port: 443
@@ -233,6 +257,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇬🇧GB-141.98.101.178-0316 | 29.763MB
+  server: 141.98.101.178
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: CH-156.146.62.164-0283 | 29.292MB
   server: 156.146.62.164
   port: 443
@@ -337,17 +367,3 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
-- name: 🇭🇰HK-1.65.197.146-0164 | 5.408MB
-  server: b959ad51-sxaf40-t323lh-1t0nn.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: ba78226c-b772-11ef-ab53-f23c91cfbbc9
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: broadcastlv.chat.bilibili.com
