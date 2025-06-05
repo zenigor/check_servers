@@ -371,12 +371,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
-- name: 🇷🇺RU-5.189.201.250-0355 | 13.367MB
-  server: 5.189.201.250
-  port: 31348
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
 - name: TH-116.206.124.41-0348 | 11.626MB
   server: 116.206.124.41
   port: 34045
