@@ -131,6 +131,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇬🇧GB-212.102.53.196-0335 | 25.11MB
+  server: 212.102.53.196
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-212.102.53.197-0321 | 25.072MB
   server: uk-dc1.yangon.club
   port: 443
@@ -317,12 +323,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: 0RsrcFJ1vOsWEqg3P55hvaacKfuShT0cc1h0t8AD0NA8u1uR
-- name: 🇷🇺RU-45.139.24.24-0355 | 16.69MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: CH-156.146.62.163-0342 | 16.617MB
   server: 156.146.62.163
   port: 443
@@ -335,12 +335,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: d3837224ed465f00
-- name: TH-116.206.124.41-0381 | 14.706MB
-  server: 116.206.124.41
-  port: 34045
-  type: ss
-  cipher: aes-256-gcm
-  password: TG:@Enkelte_notif&&TG:@Notif_Chat
 - name: 🇵🇱PL-45.144.48.63-0367 | 14.248MB
   server: war.ssvpnapp.win
   port: 57456
