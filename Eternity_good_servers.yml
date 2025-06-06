@@ -17,12 +17,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-37.19.198.244-0257 | 125.609MB
-  server: 37.19.198.244
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇺🇸US-156.146.38.169-0265 | 113.59MB
   server: 156.146.38.169
   port: 443
@@ -299,12 +293,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: pV5BAzqLZosOfuIrkyoadT
-- name: 🇺🇸US-2.58.87.221-5612 | 22.378MB
-  server: 2.58.87.221
-  port: 16899
-  type: ss
-  cipher: aes-128-gcm
-  password: Yc2CtrIz8L
 - name: 🇷🇺RU-45.151.62.54-0357 | 22.366MB
   server: 45.151.62.54
   port: 28825
@@ -381,20 +369,6 @@ proxies:
     path: /
     headers:
       Host: 456c0ed1-swq1s0-t3imuc-2nr6.hgc1.tcpbbr.net
-- name: 🇭🇰HK-1.65.205.215-1032 | 5.326MB
-  server: 0e1121ca-swd340-teqqcv-1rc6n.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 32bd96d6-186b-11f0-9a65-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: 0e1121ca-swd340-teqqcv-1rc6n.hgc1.tcpbbr.net
 - name: 🇭🇰HK-1.65.205.215-1036 | 4.995MB
   server: 1ec053e0-swd340-t4m86v-1s9pj.hgc1.tcpbbr.net
   port: 8080
