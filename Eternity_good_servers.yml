@@ -131,12 +131,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇬🇧GB-212.102.53.196-0335 | 25.11MB
-  server: 212.102.53.196
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇬🇧GB-212.102.53.197-0321 | 25.072MB
   server: uk-dc1.yangon.club
   port: 443
