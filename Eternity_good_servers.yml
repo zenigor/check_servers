@@ -275,12 +275,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Bog0ELmMM9DSxDdQ
-- name: CH-156.146.62.162-0341 | 9.475MB
-  server: 156.146.62.162
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: CH-156.146.62.161-0359 | 9.099MB
   server: 156.146.62.161
   port: 443
