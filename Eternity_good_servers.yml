@@ -215,6 +215,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Bog0ELmMM9DSxDdQ
+- name: CH-156.146.62.161-0300 | 18.855MB
+  server: 156.146.62.161
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-74.177.213.239-0296 | 18.708MB
   server: admin.c4.webramz.co
   port: 443
@@ -335,12 +341,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇷🇺RU-45.151.62.54-0312 | 16.301MB
-  server: 45.151.62.54
-  port: 28825
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 0zyDRZ1XmNXaaCAN7KEA8a
 - name: 🇵🇱PL-45.144.48.63-0320 | 16.126MB
   server: 45.144.48.63
   port: 57456
