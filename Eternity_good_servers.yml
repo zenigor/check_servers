@@ -245,6 +245,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: CH-156.146.62.164-0287 | 21.01MB
+  server: 156.146.62.164
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-85.210.120.237-0289 | 20.952MB
   server: admin.c3.webramz.co
   port: 443
@@ -341,12 +347,6 @@ proxies:
   type: ss
   cipher: aes-256-gcm
   password: TG:@Enkelte_notif&&TG:@Notif_Chat
-- name: 🇷🇺RU-45.139.24.24-0329 | 11.428MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: 🇷🇺RU-5.189.201.250-0323 | 11.304MB
   server: 5.189.201.250
   port: 31348
