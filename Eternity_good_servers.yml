@@ -173,12 +173,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇬🇧GB-212.102.53.79-0279 | 23.091MB
-  server: 212.102.53.79
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇬🇧GB-212.102.53.78-0271 | 22.99MB
   server: 212.102.53.78
   port: 443
@@ -353,12 +347,32 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
+- name: RELAY-104.21.112.1-0647 | 12.611MB
+  server: 104.21.112.1
+  port: 2096
+  type: vmess
+  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
+  alterId: 0
+  cipher: auto
+  tls: tls
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: de01.sh-cloudflare.sbs
 - name: 🇨🇦CA-142.4.216.225-4997 | 8.792MB
   server: 142.4.216.225
   port: 80
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
+- name: 🇪🇸ES-45.154.206.192-0322 | 8.525MB
+  server: 45.154.206.192
+  port: 990
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: f8f7aCzcPKbsF8p3
 - name: 🇷🇺RU-45.151.62.54-0296 | 8.133MB
   server: 45.151.62.54
   port: 28825
