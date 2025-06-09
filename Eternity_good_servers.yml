@@ -353,6 +353,20 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: JIhN6rBKkaEboLNXVSv5rq
+- name: RELAY-104.21.112.1-0647 | 12.611MB
+  server: 104.21.112.1
+  port: 2096
+  type: vmess
+  uuid: b3928f8d-ea81-4d75-bcec-4016a072adff
+  alterId: 0
+  cipher: auto
+  tls: tls
+  skip-cert-verify: false
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: de01.sh-cloudflare.sbs
 - name: 🇨🇦CA-142.4.216.225-4997 | 8.792MB
   server: 142.4.216.225
   port: 80
