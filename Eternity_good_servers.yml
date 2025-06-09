@@ -215,6 +215,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇨🇦CA-149.22.95.183-0255 | 28.919MB
+  server: 149.22.95.183
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: AT-5.181.21.194-5245 | 28.471MB
   server: 5.181.21.194
   port: 18660
