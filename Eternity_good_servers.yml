@@ -287,6 +287,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇳🇱NL-9.163.232.180-5189 | 14.944MB
+  server: 9.163.232.180
+  port: 1490
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: ojcP36n1SouDcnBg9EOZP8
 - name: 🇬🇧GB-212.102.53.78-0287 | 14.486MB
   server: 212.102.53.78
   port: 443
