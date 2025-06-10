@@ -233,14 +233,14 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇺🇸US-172.233.128.126-0289 | 31.381MB
+  server: 172.233.128.126
+  port: 1866
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: oXGp1+ihlfKg826H
 - name: 🇺🇸US-173.244.56.9-0230 | 31.245MB
   server: 173.244.56.9
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
-- name: 🇳🇱NL-149.34.244.68-0253 | 30.808MB
-  server: 149.34.244.68
   port: 443
   type: ss
   cipher: aes-128-gcm
