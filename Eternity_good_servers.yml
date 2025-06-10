@@ -257,6 +257,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇬🇧GB-212.102.53.196-0254 | 18.879MB
+  server: 212.102.53.196
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: CH-156.146.62.161-0269 | 18.877MB
   server: 156.146.62.161
   port: 443
@@ -299,35 +305,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇭🇰HK-1.36.218.227-0185 | 9.454MB
-  server: 8f67244c-sxlj40-t7r6w5-1ppvf.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 8da5616c-8566-11ee-9a21-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: broadcastlv.chat.bilibili.com
-- name: 🇭🇰HK-1.36.218.227-5135 | 9.248MB
-  server: 8f67244c-sxlj40-t7r6w5-1ppvf.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 8da5616c-8566-11ee-9a21-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  servername: 🇭🇰HK-1.36.218.227-5135 | 9.248MB
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: 8f67244c-sxlj40-t7r6w5-1ppvf.hgc1.tcpbbr.net
 - name: 🇭🇰HK-1.36.218.227-5274 | 8.719MB
   server: 3033be45-swq1s0-sxkhay-1jdha.hgc1.tcpbbr.net
   port: 8080
@@ -348,6 +325,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
+- name: CH-204.136.10.115-0328 | 2.151MB
+  server: 204.136.10.115
+  port: 1866
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: oXGp1+ihlfKg826H
 - name: 🇪🇸ES-45.154.206.192-0318 | 1.487MB
   server: 45.154.206.192
   port: 990
