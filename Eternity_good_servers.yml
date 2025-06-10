@@ -215,6 +215,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇨🇦CA-149.22.95.183-0255 | 32.545MB
+  server: 149.22.95.183
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: AT-5.181.21.194-5245 | 31.59MB
   server: 5.181.21.194
   port: 18660
@@ -227,12 +233,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-172.233.128.126-0289 | 31.381MB
-  server: 172.233.128.126
-  port: 1866
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: oXGp1+ihlfKg826H
 - name: 🇺🇸US-173.244.56.9-0230 | 31.245MB
   server: 173.244.56.9
   port: 443
@@ -259,12 +259,6 @@ proxies:
   password: shadowsocks
 - name: CZ-195.181.160.6-0273 | 29.325MB
   server: 195.181.160.6
-  port: 990
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: f8f7aCzcPKbsF8p3
-- name: PY-38.165.233.18-0293 | 29.225MB
-  server: 38.165.233.18
   port: 990
   type: ss
   cipher: chacha20-ietf-poly1305
