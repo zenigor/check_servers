@@ -305,20 +305,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇭🇰HK-1.36.218.227-5274 | 8.719MB
-  server: 3033be45-swq1s0-sxkhay-1jdha.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: de629d50-1711-11ed-bd7c-f23c913c8d2b
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: 3033be45-swq1s0-sxkhay-1jdha.hgc1.tcpbbr.net
 - name: 🇷🇺RU-5.189.201.250-0312 | 6.08MB
   server: 5.189.201.250
   port: 31348
