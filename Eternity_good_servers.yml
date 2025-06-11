@@ -383,12 +383,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
-- name: 🇨🇳TW-1.170.203.176-5160 | 2.49MB
-  server: vps.200566.xyz
-  port: 30332
-  type: ss
-  cipher: aes-128-gcm
-  password: 79739832-b888-415a-a454-8b53911c944a
 - name: 🇺🇸US-104.167.197.25-0179 | 2.336MB
   server: 104.167.197.25
   port: 57456
