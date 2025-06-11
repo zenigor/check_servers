@@ -143,6 +143,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇬🇧GB-212.102.53.194-0047 | 35.543MB
+  server: 212.102.53.194
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-85.210.120.237-0239 | 35.332MB
   server: series-a2-me.samanehha.co
   port: 443
@@ -205,6 +211,12 @@ proxies:
   password: WstuSnlu4ieA9M0L
 - name: 🇳🇱NL-149.34.244.68-0274 | 33.608MB
   server: 149.34.244.68
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.79-0286 | 33.395MB
+  server: 212.102.53.79
   port: 443
   type: ss
   cipher: aes-128-gcm
@@ -293,12 +305,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇷🇺RU-45.139.24.24-0289 | 26.246MB
-  server: 45.139.24.24
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 360e21d21977dc11
 - name: PY-38.165.233.18-0292 | 25.471MB
   server: 38.165.233.18
   port: 990
@@ -377,6 +383,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
+- name: 🇨🇳TW-1.170.203.176-5160 | 2.49MB
+  server: vps.200566.xyz
+  port: 30332
+  type: ss
+  cipher: aes-128-gcm
+  password: 79739832-b888-415a-a454-8b53911c944a
 - name: 🇺🇸US-104.167.197.25-0179 | 2.336MB
   server: 104.167.197.25
   port: 57456
