@@ -389,12 +389,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
-- name: CH-204.136.10.115-0335 | 1.403MB
-  server: 204.136.10.115
-  port: 1866
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: oXGp1+ihlfKg826H
 - name: 🇺🇸US-104.167.197.25-0185 | 1.074MB
   server: 104.167.197.25
   port: 57456
