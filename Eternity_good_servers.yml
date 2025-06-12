@@ -89,12 +89,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Bog0ELmMM9DSxDdQ
-- name: 🇬🇧GB-85.210.213.42-0282 | 39.531MB
-  server: series-a2.varzesh360.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: mps3FwmDjLrWaOVg
 - name: 🇬🇧GB-85.210.120.237-0269 | 39.197MB
   server: admin.c3.webramz.co
   port: 443
@@ -113,24 +107,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: Bog0ELmMM9DSxDdQ
-- name: 🇬🇧GB-85.210.213.42-0273 | 38.621MB
-  server: freakconfig13.felafel.org
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
-- name: 🇬🇧GB-85.210.213.42-0272 | 38.55MB
-  server: series-a1.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
-- name: 🇬🇧GB-85.210.213.42-0280 | 38.493MB
-  server: admin.c1.webramz.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: 1xO2cqPazqjGfCfd
 - name: 🇬🇧GB-212.102.53.197-0256 | 38.276MB
   server: 212.102.53.197
   port: 443
@@ -185,12 +161,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇬🇧GB-85.210.213.42-0283 | 38.012MB
-  server: series-a2.samanehha.co
-  port: 443
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: W74XFALLLuw6m5IA
 - name: 🇬🇧GB-212.102.53.81-0248 | 37.875MB
   server: 212.102.53.81
   port: 443
@@ -205,6 +175,12 @@ proxies:
   password: 69MUii7VDwMqh7Hz
 - name: 🇬🇧GB-212.102.53.197-0251 | 37.296MB
   server: uk-dc1.yangon.club
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
+- name: 🇬🇧GB-212.102.53.195-0257 | 37.081MB
+  server: 212.102.53.195
   port: 443
   type: ss
   cipher: aes-128-gcm
@@ -227,6 +203,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: u17T3BvpYaaiuW2c
+- name: 🇳🇱NL-9.163.232.180-0250 | 36.165MB
+  server: 9.163.232.180
+  port: 1490
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: ojcP36n1SouDcnBg9EOZP8
 - name: 🇨🇦CA-149.22.95.183-0270 | 35.997MB
   server: 149.22.95.183
   port: 443
@@ -287,6 +269,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
+- name: 🇫🇷FR-77.239.116.76-4928 | 26.949MB
+  server: 77.239.116.76
+  port: 8315
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: oHOP1bWFMkQVx3PdbhRlOk
 - name: 🇺🇸US-172.233.128.126-0297 | 26.731MB
   server: 172.233.128.126
   port: 1866
@@ -347,6 +335,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
+- name: TH-116.206.124.41-5179 | 12.151MB
+  server: 116.206.124.41
+  port: 34045
+  type: ss
+  cipher: aes-256-gcm
+  password: TG:@Enkelte_notif&&TG:@Notif_Chat
 - name: 🇨🇦CA-142.4.216.225-0328 | 8.912MB
   server: 142.4.216.225
   port: 80
