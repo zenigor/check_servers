@@ -233,6 +233,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: u17T3BvpYaaiuW2c
+- name: 🇳🇱NL-9.163.232.180-0250 | 22.467MB
+  server: 9.163.232.180
+  port: 1490
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: ojcP36n1SouDcnBg9EOZP8
 - name: 🇨🇦CA-149.22.95.183-0270 | 21.926MB
   server: 149.22.95.183
   port: 443
@@ -293,6 +299,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: f8f7aCzcPKbsF8p3
+- name: 🇷🇺RU-45.139.24.24-0305 | 7.15MB
+  server: 45.139.24.24
+  port: 57456
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 360e21d21977dc11
 - name: 🇺🇸US-172.233.128.126-0297 | 5.349MB
   server: 172.233.128.126
   port: 1866
