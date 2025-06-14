@@ -329,35 +329,6 @@ proxies:
   type: ss
   cipher: aes-256-gcm
   password: TG:@Enkelte_notif&&TG:@Notif_Chat
-- name: 🇭🇰HK-1.36.218.184-5692 | 8.442MB
-  server: 338b2185-sw1z40-sw51rj-hkb8.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 21a70fd2-c69c-11eb-8673-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  servername: 🇭🇰HK-1.36.218.184-5692 | 8.442MB
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: 338b2185-sw1z40-sw51rj-hkb8.hgc1.tcpbbr.net
-- name: 🇭🇰HK-1.36.218.184-0835 | 7.663MB
-  server: 338b2185-sw1z40-sw51rj-hkb8.hgc1.tcpbbr.net
-  port: 8080
-  type: vmess
-  uuid: 21a70fd2-c69c-11eb-8673-f23c9164ca5d
-  alterId: 0
-  cipher: auto
-  tls: false
-  skip-cert-verify: false
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: broadcastlv.chat.bilibili.com
 - name: CH-204.136.10.115-0368 | 2.879MB
   server: 204.136.10.115
   port: 1866
