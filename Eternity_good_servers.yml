@@ -275,6 +275,12 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
+- name: 🇷🇺RU-45.139.24.24-5719 | 26.575MB
+  server: 45.139.24.24
+  port: 57456
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 360e21d21977dc11
 - name: 🇬🇧GB-141.98.101.178-0345 | 25.973MB
   server: 141.98.101.178
   port: 443
