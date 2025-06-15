@@ -215,6 +215,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: mps3FwmDjLrWaOVg
+- name: 🇬🇧GB-85.210.120.237-0353 | 21.636MB
+  server: 85.210.120.237
+  port: 443
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: Bog0ELmMM9DSxDdQ
 - name: 🇬🇧GB-131.145.99.243-0352 | 21.523MB
   server: admin.c1.webramz.co
   port: 443
