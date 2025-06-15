@@ -71,12 +71,6 @@ proxies:
   type: ss
   cipher: aes-128-gcm
   password: shadowsocks
-- name: 🇺🇸US-37.19.198.243-0308 | 48.542MB
-  server: 37.19.198.243
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: 🇺🇸US-37.19.198.244-0306 | 48.491MB
   server: 37.19.198.244
   port: 443
@@ -251,12 +245,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: W74XFALLLuw6m5IA
-- name: CH-156.146.62.161-0365 | 20.724MB
-  server: 156.146.62.161
-  port: 443
-  type: ss
-  cipher: aes-128-gcm
-  password: shadowsocks
 - name: CH-156.146.62.162-0367 | 20.487MB
   server: 156.146.62.162
   port: 443
@@ -325,12 +313,6 @@ proxies:
   password: JIhN6rBKkaEboLNXVSv5rq
 - name: 🇵🇱PL-45.144.48.63-0382 | 10.921MB
   server: war.ssvpnapp.win
-  port: 57456
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: d3837224ed465f00
-- name: 🇵🇱PL-45.144.48.63-0383 | 9.424MB
-  server: 45.144.48.63
   port: 57456
   type: ss
   cipher: chacha20-ietf-poly1305
