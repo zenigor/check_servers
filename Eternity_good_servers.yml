@@ -359,12 +359,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: RiPuKJJl18ZgvLpTjWxBwSfKiPkt9gzFKyxGCY8eHtOcDb2X
-- name: 🇯🇵JP-91.194.160.151-5389 | 11.525MB
-  server: 91.194.160.151
-  port: 1235
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: gChbvpX95FZTtOv6dtwsRL
 - name: 🇨🇦CA-142.4.216.225-0423 | 6.997MB
   server: ca225.vpnbook.com
   port: 80
@@ -389,12 +383,6 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: oXGp1+ihlfKg826H
-- name: 🇨🇳TW-1.170.247.216-5561 | 1.662MB
-  server: vps.200566.xyz
-  port: 30332
-  type: ss
-  cipher: aes-128-gcm
-  password: 79739832-b888-415a-a454-8b53911c944a
 - name: 🇺🇸US-38.121.43.71-0451 | 1.178MB
   server: 38.121.43.71
   port: 5001
