@@ -113,6 +113,12 @@ proxies:
   type: ss
   cipher: chacha20-ietf-poly1305
   password: ojcP36n1SouDcnBg9EOZP8
+- name: 🇬🇧GB-212.102.53.79-0375 | 32.427MB
+  server: 212.102.53.79
+  port: 443
+  type: ss
+  cipher: aes-128-gcm
+  password: shadowsocks
 - name: 🇬🇧GB-212.102.53.193-0344 | 32.413MB
   server: 212.102.53.193
   port: 443
